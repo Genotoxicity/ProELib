@@ -1,0 +1,90 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ControlTemplate TargetType="{x:Type ToggleButton}" x:Key="ColorPickerTopButtonTemplate">
+        <Border BorderBrush="Gray" BorderThickness="1" Padding="1" Margin="0,0,0,1" Width="{TemplateBinding Width}" SnapsToDevicePixels="True" Height="21">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="20"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{TemplateBinding Content}" TextAlignment="Center" Background="{TemplateBinding Background}" Margin="0,0,1,0" Grid.Column="0" />
+                <Border Grid.Column="1" BorderBrush="Silver" BorderThickness="1" SnapsToDevicePixels="True" CornerRadius="0">
+                    <TextBlock x:Name="ArrowBlock" Foreground="Black" FontSize="15" FontFamily="Marlett" TextAlignment="Center"/>
+                </Border>
+            </Grid>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter TargetName="ArrowBlock" Property="Text" Value="5"/>
+            </Trigger>
+            <Trigger Property="IsChecked" Value="False">
+                <Setter TargetName="ArrowBlock" Property="Text" Value="6"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <LinearGradientBrush x:Key="PopupBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="WhiteSmoke" Offset="0" />
+        <GradientStop Color="WhiteSmoke" Offset="0.5" />
+        <GradientStop Color="LightSlateGray" Offset="0.5" />
+        <GradientStop Color="LightSlateGray" Offset="1" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="PressedBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="LightSlateGray" Offset="0" />
+        <GradientStop Color="LightSlateGray" Offset="0.5" />
+        <GradientStop Color="WhiteSmoke" Offset="0.5" />
+        <GradientStop Color="WhiteSmoke" Offset="1" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="RainbowBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="Red" Offset="0.03"/>
+        <GradientStop Color="Orange" Offset="0.06"/>
+        <GradientStop Color="Orange" Offset="0.08"/>
+        <GradientStop Color="Yellow" Offset="0.11"/>
+        <GradientStop Color="Yellow" Offset="0.13"/>
+        <GradientStop Color="Green" Offset="0.16"/>
+        <GradientStop Color="Green" Offset="0.18"/>
+        <GradientStop Color="LightBlue" Offset="0.21"/>
+        <GradientStop Color="LightBlue" Offset="0.23"/>
+        <GradientStop Color="Blue" Offset="0.26"/>
+        <GradientStop Color="Blue" Offset="0.28"/>
+        <GradientStop Color="Violet" Offset="0.31"/>
+        <GradientStop Color="Violet" Offset="0.33"/>
+        <GradientStop Color="White" Offset="0.36"/>
+        <GradientStop Color="White" Offset="0.7"/>
+        <GradientStop Color="Black" Offset="1"/>
+    </LinearGradientBrush>
+    
+    <ControlTemplate TargetType="{x:Type RadioButton}" x:Key="ColorElementTemplate">
+        <Border Name="Border" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" BorderBrush="{StaticResource PopupBrush}" BorderThickness="0">
+            <ContentPresenter/>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="Border" Property="BorderThickness" Value="1"/>
+            </Trigger>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter TargetName="Border" Property="BorderThickness" Value="1"/>
+                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource PressedBrush}"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    
+    <ControlTemplate TargetType="{x:Type RadioButton}" x:Key="AutoColorElementTemplate" >
+        <Border Name="Border" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0">
+            <ContentPresenter/>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="Border" Property="BorderThickness" Value="1"/>
+            </Trigger>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter TargetName="Border" Property="BorderThickness" Value="1"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <DataTemplate x:Key="FontItemTemplate">
+        <TextBlock Text="{Binding}" FontFamily="{Binding}" FontSize="14"/>
+    </DataTemplate>
+</ResourceDictionary>
