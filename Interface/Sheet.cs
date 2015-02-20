@@ -40,6 +40,19 @@ namespace ProELib
             }
         }
 
+        public List<int> SchematicTypes
+        {
+            get
+            {
+                dynamic schematicTypes = default(dynamic);
+                int schematicTypeCount = sheet.GetSchematicTypes(ref schematicTypes);
+                List<int> types = new List<int>(schematicTypeCount);
+                for (int i = 1; i <= schematicTypeCount; i++)
+                    types.Add(schematicTypes[i]);
+                return types;
+            }
+        }
+
         public List<int> SymbolIds
         {
             get
@@ -161,14 +174,7 @@ namespace ProELib
 
         public bool IsSchematicTypeOf(int schematicTypeCode)
         {
-            dynamic schematicTypes = default(dynamic);
-            int schematicTypeCount = sheet.GetSchematicTypes(ref schematicTypes);
-            if (schematicTypeCount == 0)
-                return false;
-            for (int i = 1; i <= schematicTypeCount; i++)
-                if (schematicTypes[i] == schematicTypeCode)
-                    return true;
-            return false;
+            return SchematicTypes.Contains(schematicTypeCode);
         }
 
         public double MoveDown(double from, double offset)

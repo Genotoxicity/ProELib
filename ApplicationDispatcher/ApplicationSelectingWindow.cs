@@ -40,6 +40,7 @@ namespace ProELib
             MinHeight = grid.MinWidth + 10;
             Width = 400;
             Height = 300;
+            Title = "Выберите проект:";
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             FocusManager.SetFocusedElement(grid, listBox);  // установка фокуса в listBox
             Closing += ProjectSelectingWindow_Closing;

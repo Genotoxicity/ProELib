@@ -108,19 +108,19 @@ namespace ProELib
             }
         }
 
-        public CableDevice GetCableDeviceById(int id)
+        public CableDevice CreateCableDevice()
         {
-            return new CableDevice(id, e3ObjectFabric);
+            return new CableDevice(0, e3ObjectFabric);
         }
 
-        public Component GetComponentById(int id)
+        public Component CreateComponent()
         {
-            return new Component(id, e3ObjectFabric);
+            return new Component(0, e3ObjectFabric);
         }
 
-        public CableCore GetCableCoreById(int id)
+        public CableCore CreateCableCore()
         {
-            return new CableCore(id, e3ObjectFabric);
+            return new CableCore(0, e3ObjectFabric);
         }
 
         public List<int> SignalIds
@@ -205,64 +205,77 @@ namespace ProELib
             }
         }
 
-        public NormalDevice GetNormalDeviceById(int id)
+        public NormalDevice CreateNormalDevice()
         {
-            return new NormalDevice(id, e3ObjectFabric);
+            return new NormalDevice(0, e3ObjectFabric);
         }
 
-        public DevicePin GetDevicePinById(int id)
+        public DevicePin CreateDevicePin()
         {
-            return new DevicePin(id, e3ObjectFabric);
+            return new DevicePin(0, e3ObjectFabric);
         }
 
-        public WireCore GetWireCoreById(int id)
+        public WireCore CreateWireCore()
         {
-            return new WireCore(id, e3ObjectFabric);
+            return new WireCore(0, e3ObjectFabric);
         }
 
-        public E3Text GetTextById(int id)
+        public E3Text CreateText()
         {
-            return new E3Text(id, e3ObjectFabric);
+            return new E3Text(0, e3ObjectFabric);
         }
 
-        public Graphic GetGraphicById(int id)
+        public Graphic CreateGraphic()
         {
-            return new Graphic(id, e3ObjectFabric);
+            return new Graphic(0, e3ObjectFabric);
         }
 
-        public Group GetGroupById(int id)
+        public Group CreateGroup()
         {
-            return new Group(id, e3ObjectFabric);
+            return new Group(0, e3ObjectFabric);
         }
 
-        public Sheet GetSheetById(int id)
+        public Sheet CreateSheet()
         {
-            return new Sheet(id, e3ObjectFabric);
+            return new Sheet(0, e3ObjectFabric);
         }
 
-        public Signal GetSignalById(int id)
+        public Signal CreateSignal()
         {
-            return new Signal(id, e3ObjectFabric);
+            return new Signal(0, e3ObjectFabric);
         }
 
-        public Net GetNetById(int id)
+        public Net CreateNet()
         {
-            return new Net(id, e3ObjectFabric);
+            return new Net(0, e3ObjectFabric);
         }
 
-        public Symbol GetSymbolById(int id)
+        public Symbol CreateSymbol()
         {
-            return new Symbol(id, e3ObjectFabric);
+            return new Symbol(0, e3ObjectFabric);
         }
 
-        public Connection GetConnectionById(int id)
+        public Connection CreateConnection()
         {
-            return new Connection(id, e3ObjectFabric);
+            return new Connection(0, e3ObjectFabric);
         }
 
-        public Outline GetOutlineById(int id)
+        public Outline CreateOutline()
         {
-            return new Outline(id, e3ObjectFabric);
+            return new Outline(0, e3ObjectFabric);
+        }
+
+        public List<int> GetSheetIdsByType(int schematicTypeCode)
+        {
+            Sheet sheet = CreateSheet();
+            List<int> ids = new List<int>();
+            foreach (int sheetId in SheetIds)
+            {
+                sheet.Id = sheetId;
+                if (sheet.SchematicTypes.Contains(schematicTypeCode))
+                    ids.Add(sheetId);
+            }
+            return ids;
         }
 
         public int JumpToId(int id)
