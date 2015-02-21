@@ -82,6 +82,19 @@ namespace ProELib
             }
         }
 
+        public List<int> TerminalIds
+        {
+            get
+            {
+                dynamic terminalIds = default(dynamic);
+                int terminalCount = e3ObjectFabric.GetJob().GetTerminalIds(ref terminalIds);
+                List<int> ids = new List<int>(terminalCount);
+                for (int i = 1; i <= terminalCount; i++)    // e3 в [0] всегда возвращает null
+                    ids.Add(terminalIds[i]);
+                return ids;
+            }
+        }
+
         public List<int> AllDeviceIds
         {
             get
