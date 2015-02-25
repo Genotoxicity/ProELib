@@ -20,9 +20,9 @@ namespace ProELib
             }
         }
 
-        internal Group(int id, E3ObjectFabric e3ObjectFabric)
+        internal Group(e3Job job)
         {
-            group = e3ObjectFabric.GetGroup(id);
+            group = job.CreateGroupObject();
         }
 
         public int CreateGroup(List<int> ids)

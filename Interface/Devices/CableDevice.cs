@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using e3;
 
 namespace ProELib
 {
@@ -17,8 +18,8 @@ namespace ProELib
             }
         }
 
-        internal CableDevice(int id, E3ObjectFabric e3ObjectFabric)
-            : base(id, e3ObjectFabric)
+        internal CableDevice(e3Job job)
+            : base(job)
         {
         }
     }

@@ -24,6 +24,14 @@ namespace ProELib
             }
         }
 
+        public int ConnectedPinId
+        {
+            get
+            {
+                return pin.GetConnectedPinId();
+            }
+        }
+
         public int SequenceNumber
         {
             get
@@ -121,19 +129,25 @@ namespace ProELib
             }
         }
 
-        internal DevicePin(int id, E3ObjectFabric e3ObjectFabric) : base(id, e3ObjectFabric)
+        public bool IsView
+        {
+            get
+            {
+                return pin.IsView() == 1;
+            }
+        }
+
+        public bool IsPinView
+        {
+            get
+            {
+                return pin.IsPinView() == 1;
+            }
+        }
+
+        internal DevicePin(e3Job job) : base(job)
         {
             isLocationVariablesSet = false;
-        }
-
-        public bool IsView()
-        {
-            return pin.IsView() == 1;
-        }
-
-        public bool IsPinView()
-        {
-            return pin.IsPinView() == 1;
         }
 
         

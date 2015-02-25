@@ -5,7 +5,6 @@ namespace ProELib
 {
     public class Component
     {
-        protected E3ObjectFabric e3ObjectFabric;
         protected e3Component component;
 
         public virtual int Id
@@ -20,12 +19,18 @@ namespace ProELib
             }
         }
 
-        internal Component(int id, E3ObjectFabric e3ObjectFabric)
+        public string Name
         {
-            this.e3ObjectFabric = e3ObjectFabric;
-            component = e3ObjectFabric.GetComponent(id);
+            get
+            {
+                return component.GetName();
+            }
         }
 
+        internal Component(e3Job job)
+        {
+            component = job.CreateComponentObject();
+        }
 
         public string GetAttributeValue(string attributeName)
         {

@@ -32,9 +32,9 @@ namespace ProELib
             }
         }
 
-        internal Graphic(int id, E3ObjectFabric e3ObjectFabric)
+        internal Graphic(e3Job job)
         {
-            graph = e3ObjectFabric.GetGraph(id);;
+            graph = job.CreateGraphObject();
         }
 
         public int CreateLine(int sheetId, double x1, double y1, double x2, double y2)

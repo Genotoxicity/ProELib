@@ -8,7 +8,6 @@ namespace ProELib
     public class Connection
     {
         private e3Connection connection;
-        //private E3ObjectFabric e3ObjectFabric;
 
         public List<int> PinIds
         {
@@ -19,6 +18,19 @@ namespace ProELib
                 List<int> ids = new List<int>(pinCount);
                 for (int i = 1; i <= pinCount; i++)
                     ids.Add(connectionPinIds[i]);
+                return ids;
+            }
+        }
+
+        public List<int> ReferenceSymbolIds
+        { 
+            get
+            {
+                dynamic symbolIds = default(dynamic);
+                int symbolCount = connection.GetReferenceSymbolIds(ref symbolIds);
+                List<int> ids = new List<int>(symbolCount);
+                for (int i = 1; i <= symbolCount; i++)
+                    ids.Add(symbolIds[i]);
                 return ids;
             }
         }
@@ -43,10 +55,9 @@ namespace ProELib
             }
         }
 
-        internal Connection(int id, E3ObjectFabric e3ObjectFabric)
+        internal Connection(e3Job job)
         {
-            //this.e3ObjectFabric = e3ObjectFabric;
-            connection = e3ObjectFabric.GetConnection(id);
+            connection = job.CreateConnectionObject();
         }
 
         public bool IsUnique()

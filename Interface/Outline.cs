@@ -31,9 +31,9 @@ namespace ProELib
             }
         }
 
-        internal Outline(int id, E3ObjectFabric e3ObjectFabric)
+        internal Outline(e3Job job)
         {
-            outline = e3ObjectFabric.GetOutline(id);
+            outline = job.CreateOutlineObject();
         }
 
         public int GetPosition(out double x, out double y, out double z)

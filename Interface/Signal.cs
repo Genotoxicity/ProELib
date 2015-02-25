@@ -63,9 +63,9 @@ namespace ProELib
             }
         }
 
-        internal Signal(int id, E3ObjectFabric e3ObjectFabric)
+        internal Signal(e3Job job)
         {
-            signal = e3ObjectFabric.GetSignal(id);
+            signal = job.CreateSignalObject();
         }
 
         public int GetIdByName(string signalName)

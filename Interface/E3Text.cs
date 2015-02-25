@@ -21,10 +21,10 @@ namespace ProELib
             }
         }
 
-        internal E3Text(int id, E3ObjectFabric e3ObjectFabric)
+        internal E3Text(e3Job job)
         {
-            text = e3ObjectFabric.GetText(id);
-            graph = e3ObjectFabric.GetGraph(0);
+            text = job.CreateTextObject();
+            graph = job.CreateGraphObject();
         }
 
         public int CreateText(int sheetId, string value, double x, double y)

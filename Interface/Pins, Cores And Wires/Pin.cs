@@ -4,7 +4,6 @@ namespace ProELib
 {
     public abstract class Pin
     {
-        protected E3ObjectFabric e3ObjectFabric;
         protected e3Pin pin;
 
         public virtual int Id
@@ -44,10 +43,9 @@ namespace ProELib
 
         }
 
-        protected Pin(int id, E3ObjectFabric e3ObjectFabric)
+        protected Pin(e3Job job)
         {
-            this.e3ObjectFabric = e3ObjectFabric;
-            pin = e3ObjectFabric.GetPin(id);
+            pin = job.CreatePinObject();
         }
 
         public string GetAttributeValue(string attributeName)

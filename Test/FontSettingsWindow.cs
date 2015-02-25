@@ -13,12 +13,12 @@ namespace ProELib
         private SolidColorBrush textBlockForeGroundBrush;
         private TextBlock textBlock;
 
-        public FontSettingsWindow(int processId)
+        public FontSettingsWindow(E3Project project)
         {
-            Test(processId);
+            Test(project);
         }
 
-        public void Test(int processId)
+        public void Test(E3Project project)
         {
             IEnumerable<string> fontFamilies = System.Drawing.FontFamily.Families.Select(f=>f.Name);
             ListBox listBox = new ListBox();
@@ -29,7 +29,7 @@ namespace ProELib
             listBox.Width = 250;
             listBox.Height = 300;
             listBox.SelectionChanged += listBox_SelectionChanged;
-            Dictionary<int, Color> colorByCode = E3ColorTable.GetColorByCode(processId);
+            Dictionary<int, Color> colorByCode = E3ColorTable.GetColorByCode(project);
             ColorPicker colorPicker = new ColorPicker(colorByCode);
             colorPicker.VerticalAlignment = VerticalAlignment.Center;
             colorPicker.SelectedColorChanged += colorPicker_SelectedColorChanged;

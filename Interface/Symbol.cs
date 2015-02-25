@@ -24,6 +24,14 @@ namespace ProELib
             }
         }
 
+        public bool IsConnected
+        {
+            get
+            {
+                return symbol.IsConnected()==1;
+            }
+        }
+
         public Area Area
         {
             get
@@ -67,6 +75,14 @@ namespace ProELib
             }
         }
 
+        public string Type
+        {
+            get
+            {
+                return symbol.GetType();
+            }
+        }
+
         public string TypeName
         {
             get
@@ -104,9 +120,20 @@ namespace ProELib
             }
         }
 
-        internal Symbol(int id, E3ObjectFabric e3ObjectFabric)
+        public SheetReferenceInfo SheetReferenceInfo
         {
-            symbol = e3ObjectFabric.GetSymbol(id);
+            get
+            {
+                dynamic inout, type, refnam, signam;
+                if (symbol.GetSheetReferenceInfo(out inout, out type, out refnam, out signam) == 1)
+                    return new SheetReferenceInfo((int)inout, (int)type, (string)signam, (string)refnam);
+                return null;
+            }
+        }
+
+        internal Symbol(e3Job job)
+        {
+            symbol = job.CreateSymbolObject();
             isAreaGot = false;
             isLocationVariablesSet = false;
         }

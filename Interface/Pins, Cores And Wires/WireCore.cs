@@ -1,4 +1,6 @@
-﻿namespace ProELib
+﻿using e3;
+
+namespace ProELib
 {
     public class WireCore : Core
     {
@@ -13,8 +15,8 @@
             }
         }
 
-        internal WireCore(int id, E3ObjectFabric e3ObjectFabric)
-            : base(id, e3ObjectFabric)
+        internal WireCore(e3Job job)
+            : base(job)
         {
         }
     }

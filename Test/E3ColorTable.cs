@@ -6,23 +6,16 @@ namespace ProELib
 {
     static class E3ColorTable
     {
-        public static Dictionary<int, Color> GetColorByCode(int processId)
+        public static Dictionary<int, Color> GetColorByCode(E3Project project)
         {
             int maxColorIndex = 255;
-            E3ObjectFabric e3Objects = new E3ObjectFabric(processId);
             Dictionary<int, Color> colorByCode = new Dictionary<int, Color>();
             colorByCode.Add(-1, Colors.Black);
-            dynamic r = default(dynamic);
-            dynamic g = default(dynamic);
-            dynamic b = default(dynamic);
-            e3Job job = e3Objects.GetJob();
             for (int i = 0; i <= maxColorIndex; i++)
             {
-                job.GetRGBValue(i, ref r, ref g, ref b);
-                colorByCode.Add(i, Color.FromArgb(0xFF, (byte)r, (byte)g, (byte)b));
+                RGB rgb = project.GetRGB(i);
+                colorByCode.Add(i, Color.FromArgb(0xFF, rgb.R, rgb.G, rgb.B));
             }
-            job = null;
-            e3Objects.Release();
             return colorByCode;
         }
     }

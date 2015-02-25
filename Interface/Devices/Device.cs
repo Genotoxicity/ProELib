@@ -5,9 +5,9 @@ namespace ProELib
 {
     public class Device
     {
-        protected E3ObjectFabric e3ObjectFabric;
+        protected e3Job job;
         protected e3Device device;
-        protected e3Component component;
+        protected Component component;
 
         public virtual int Id
         {
@@ -18,8 +18,7 @@ namespace ProELib
             set
             {
                 device.SetId(value);
-                if (component != null)
-                    component.SetId(value);
+                Component.Id = value;
             }
         }
 
@@ -35,13 +34,24 @@ namespace ProELib
             }
         }
 
-        public string ComponentName
+        protected Component Component
         {
             get
             {
                 if (component == null)
-                    component = e3ObjectFabric.GetComponent(Id);
-                return component.GetName();
+                {
+                    component = new Component(job);
+                    component.Id = Id;
+                }
+                return component;
+            }
+        }
+
+        public string ComponentName
+        {
+            get
+            {
+                return Component.Name;
             }
         }
 
@@ -82,10 +92,10 @@ namespace ProELib
             }
         }
 
-        protected Device(int id, E3ObjectFabric e3ObjectFabric)
+        protected Device(e3Job job)
         {
-            this.e3ObjectFabric = e3ObjectFabric;
-            device = e3ObjectFabric.GetDevice(id);
+            this.job = job;
+            device = job.CreateDeviceObject();
         }
 
         public bool IsCable()
@@ -144,9 +154,7 @@ namespace ProELib
 
         public string GetComponentAttributeValue(string attributeName)
         {
-            if (component == null)
-                component = e3ObjectFabric.GetComponent(Id);
-            return component.GetAttributeValue(attributeName);
+            return Component.GetAttributeValue(attributeName);
         }
 
     }

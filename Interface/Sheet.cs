@@ -7,7 +7,6 @@ namespace ProELib
     public class Sheet
     {
         private e3Sheet sheet;
-        private E3ObjectFabric objectFabric;
         private OrdinateDirection ordinateDirection;
         private AbscissaDirection abscissaDirection;
         private Area drawingArea;
@@ -147,10 +146,9 @@ namespace ProELib
             }
         }
 
-        internal Sheet(int id, E3ObjectFabric e3ObjectFabric)
+        internal Sheet(e3Job job)
         {
-            sheet = e3ObjectFabric.GetSheet(id);
-            objectFabric = e3ObjectFabric;
+            sheet = job.CreateSheetObject();
             SetAxesDirections();
             isDrawingAreaGot = false;
         }
@@ -268,7 +266,7 @@ namespace ProELib
 
         public int Create(string name, string format, int targetSheetId, InsertPosition position)
         {
-            int newSheetId = objectFabric.GetSheet(0).Create(0, name, format, targetSheetId, (int)position);
+            int newSheetId = sheet.Create(0, name, format, targetSheetId, (int)position);
             Id = newSheetId;
             return newSheetId;
         }

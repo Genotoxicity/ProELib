@@ -1,9 +1,11 @@
-﻿namespace ProELib
+﻿using e3;
+
+namespace ProELib
 {
     public class CableCore : Core
     {
-        internal CableCore(int id, E3ObjectFabric e3ObjectFabric)
-            : base(id, e3ObjectFabric)
+        internal CableCore(e3Job job)
+            : base(job)
         {
 
         }

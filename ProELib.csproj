@@ -58,6 +58,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums\AbscissaDirection.cs" />
+    <Compile Include="Enums\ReferenceInOut.cs" />
+    <Compile Include="Enums\ReferenceType.cs" />
+    <Compile Include="Interface\NetSegment.cs" />
+    <Compile Include="Interface\SheetReferenceInfo.cs" />
     <Compile Include="Test\ColorPicker.cs" />
     <Compile Include="Structs\Area.cs" />
     <Compile Include="Interface\Component.cs" />
@@ -66,10 +70,11 @@
     <Compile Include="Interface\Net.cs" />
     <Compile Include="Interface\Outline.cs" />
     <Compile Include="Interface\OutlineType.cs" />
-    <Compile Include="Interface\SymbolTransformation.cs" />
+    <Compile Include="Enums\SymbolTransformation.cs" />
     <Compile Include="Interface\Signal.cs" />
     <Compile Include="Interface\Symbol.cs" />
     <Compile Include="Structs\PinPanelLocation.cs" />
+    <Compile Include="Test\RGB.cs" />
     <Compile Include="Test\SelectedColorChangedEventArgs.cs" />
     <Compile Include="Test\E3ColorTable.cs" />
     <Compile Include="Test\FontSettingsWindow.cs" />
@@ -79,7 +84,6 @@
     <Compile Include="Font\Mode.cs" />
     <Compile Include="Font\Styles.cs" />
     <Compile Include="Interface\Devices\NormalDevice.cs" />
-    <Compile Include="Interface\E3ObjectFabric.cs" />
     <Compile Include="Interface\Graphic.cs" />
     <Compile Include="Interface\Group.cs" />
     <Compile Include="Interface\Pins, Cores And Wires\Core.cs" />

@@ -1,4 +1,5 @@
-﻿using e3;
+﻿using System.Collections.Generic;
+using e3;
 
 namespace ProELib
 {
@@ -18,6 +19,19 @@ namespace ProELib
             }
         }
 
+        public List<int> NetSegmentIds
+        {
+            get
+            {
+                dynamic netSegmentIds = default(dynamic);
+                int netSegmentCount = net.GetNetSegmentIds(ref netSegmentIds);
+                List<int> ids = new List<int>(netSegmentCount);
+                for (int i = 1; i <= netSegmentCount; i++)
+                    ids.Add(netSegmentIds[i]);
+                return ids;
+            }
+        }
+
         public bool IsSignalTransfered
         {
             get
@@ -26,9 +40,9 @@ namespace ProELib
             }
         }
 
-        internal Net(int id, E3ObjectFabric e3ObjectFabric)
+        internal Net(e3Job job)
         {
-            net = e3ObjectFabric.GetNet(id);
+            net = job.CreateNetObject();
         }
 
         public bool TrySetTransferSignal(bool netTransferSignal)

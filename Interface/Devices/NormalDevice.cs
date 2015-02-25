@@ -1,9 +1,22 @@
 ﻿using System.Collections.Generic;
+using e3;
 
 namespace ProELib
 {
     public class NormalDevice : Device
     {
+        private DevicePin pin;
+
+        private DevicePin Pin
+        { 
+            get
+            {
+                if (pin == null)
+                    pin = new DevicePin(job);
+                return pin;
+            }
+        }
+
         public List<int> OutlineIds
         {
             get
@@ -46,8 +59,31 @@ namespace ProELib
             }
         }
 
-        internal NormalDevice(int id, E3ObjectFabric e3ObjectFabric)
-            : base(id, e3ObjectFabric)
+        public List<int> ConnectedDeviceIds
+        {
+            get
+            {
+                List<int> connectedDeviceIds = new List<int>();
+                int originalId = Id;
+                foreach (int pinId in PinIds)
+                {
+                    Pin.Id = pinId;
+                    int connectedPinId = Pin.ConnectedPinId;
+                    if (connectedPinId > 0)
+                    {
+                        Id = connectedPinId;
+                        int connectedId = Id;
+                        if (!connectedDeviceIds.Contains(connectedId))
+                            connectedDeviceIds.Add(connectedId);
+                    }
+                }
+                Id = originalId;
+                return connectedDeviceIds;
+            }
+        }
+
+        internal NormalDevice(e3Job job)
+            : base(job)
         { 
         
         }

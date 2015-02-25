@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Linq;
 using e3;
 
@@ -6,7 +7,10 @@ namespace ProELib
 {
     public class E3Project
     {
-        private E3ObjectFabric e3ObjectFabric;
+        private e3Application app;
+        private e3Job job;
+        private int processId;
+
         private int undefinedId = -1;
         private int wireGroupId = 0;
 
@@ -22,7 +26,10 @@ namespace ProELib
 
         public E3Project(int applicationProcessId)
         {
-            e3ObjectFabric = new E3ObjectFabric(applicationProcessId);
+            CT.Dispatcher dispatcher = new CT.Dispatcher();
+            processId = applicationProcessId;
+            app = dispatcher.GetE3ByProcessId(processId) as e3Application;
+            job = app.CreateJobObject();
         }
 
         public List<int> WireIds
@@ -31,7 +38,8 @@ namespace ProELib
             {
                 if (WireGroupId == undefinedId)   // если проводов не найдено
                     return new List<int>(0);   // возвращаем пустой список
-                e3Device wireGroup = e3ObjectFabric.GetDevice(WireGroupId);
+                e3Device wireGroup = job.CreateDeviceObject();
+                wireGroup.SetId(WireGroupId);
                 dynamic wireIds = default(dynamic);
                 int wireCount = wireGroup.GetCoreIds(ref wireIds);
                 List<int> ids = new List<int>(wireCount);
@@ -44,8 +52,8 @@ namespace ProELib
         private int GetWireGroupId()
         {
             dynamic cableIds = default(dynamic);
-            int cableCount = e3ObjectFabric.GetJob().GetCableIds(ref cableIds);
-            e3Device device = e3ObjectFabric.GetJob().CreateDeviceObject();
+            int cableCount = job.GetCableIds(ref cableIds);
+            e3Device device = job.CreateDeviceObject();
             for (int i = 1; i <= cableCount; i++)
             {
                 device.SetId(cableIds[i]);
@@ -60,7 +68,7 @@ namespace ProELib
             get
             {
                 dynamic cableIds = default(dynamic);
-                int cableCount = e3ObjectFabric.GetJob().GetCableIds(ref cableIds);
+                int cableCount = job.GetCableIds(ref cableIds);
                 List<int> ids = new List<int>(cableCount);
                 for (int i = 1; i <= cableCount; i++)    // e3 в [0] всегда возвращает null
                     ids.Add(cableIds[i]);
@@ -74,10 +82,36 @@ namespace ProELib
             get
             {
                 dynamic deviceIds = default(dynamic);
-                int deviceCount = e3ObjectFabric.GetJob().GetDeviceIds(ref deviceIds);
+                int deviceCount = job.GetDeviceIds(ref deviceIds);
                 List<int> ids = new List<int>(deviceCount);
                 for (int i = 1; i <= deviceCount; i++)    // e3 в [0] всегда возвращает null
                     ids.Add(deviceIds[i]);
+                return ids;
+            }
+        }
+
+        public List<int> SymbolIds
+        {
+            get
+            {
+                dynamic symbolIds = default(dynamic);
+                int symbolCount = job.GetSymbolIds(ref symbolIds);
+                List<int> ids = new List<int>(symbolCount);
+                for (int i = 1; i <= symbolCount; i++)    // e3 в [0] всегда возвращает null
+                    ids.Add(symbolIds[i]);
+                return ids;
+            }
+        }
+
+        public List<int> NetIds
+        {
+            get
+            {
+                dynamic netlIds = default(dynamic);
+                int netCount = job.GetNetIds(ref netlIds);
+                List<int> ids = new List<int>(netCount);
+                for (int i = 1; i <= netCount; i++)    // e3 в [0] всегда возвращает null
+                    ids.Add(netlIds[i]);
                 return ids;
             }
         }
@@ -87,7 +121,7 @@ namespace ProELib
             get
             {
                 dynamic terminalIds = default(dynamic);
-                int terminalCount = e3ObjectFabric.GetJob().GetTerminalIds(ref terminalIds);
+                int terminalCount =job.GetTerminalIds(ref terminalIds);
                 List<int> ids = new List<int>(terminalCount);
                 for (int i = 1; i <= terminalCount; i++)    // e3 в [0] всегда возвращает null
                     ids.Add(terminalIds[i]);
@@ -100,7 +134,7 @@ namespace ProELib
             get
             {
                 dynamic allDeviceIds = default(dynamic);
-                int allDeviceCount = e3ObjectFabric.GetJob().GetAllDeviceIds(ref allDeviceIds);
+                int allDeviceCount = job.GetAllDeviceIds(ref allDeviceIds);
                 List<int> ids = new List<int>(allDeviceCount);
                 for (int i = 1; i <= allDeviceCount; i++)    // e3 в [0] всегда возвращает null
                     ids.Add(allDeviceIds[i]);
@@ -113,7 +147,7 @@ namespace ProELib
             get
             {
                 dynamic treeSelectedSheetIds = default(dynamic);
-                int sheetCount = e3ObjectFabric.GetJob().GetTreeSelectedSheetIds(ref treeSelectedSheetIds);
+                int sheetCount = job.GetTreeSelectedSheetIds(ref treeSelectedSheetIds);
                 List<int> ids = new List<int>(sheetCount);
                 for (int i = 1; i <= sheetCount; i++)    // e3 в [0] всегда возвращает null
                     ids.Add(treeSelectedSheetIds[i]);
@@ -123,17 +157,17 @@ namespace ProELib
 
         public CableDevice CreateCableDevice()
         {
-            return new CableDevice(0, e3ObjectFabric);
+            return new CableDevice(job);
         }
 
         public Component CreateComponent()
         {
-            return new Component(0, e3ObjectFabric);
+            return new Component(job);
         }
 
         public CableCore CreateCableCore()
         {
-            return new CableCore(0, e3ObjectFabric);
+            return new CableCore(job);
         }
 
         public List<int> SignalIds
@@ -141,7 +175,7 @@ namespace ProELib
             get
             {
                 dynamic signalIds = default(dynamic);
-                int signalCount = e3ObjectFabric.GetJob().GetSignalIds(ref signalIds);
+                int signalCount = job.GetSignalIds(ref signalIds);
                 List<int> ids = new List<int>(signalCount);
                 for (int i = 1; i <= signalCount; i++)    // e3 в [0] всегда возвращает null
                     ids.Add(signalIds[i]);
@@ -154,10 +188,23 @@ namespace ProELib
             get
             {
                 dynamic selectedSignalIds = default(dynamic);
-                int selectedSignalCount = e3ObjectFabric.GetJob().GetSelectedSignalIds(ref selectedSignalIds);
+                int selectedSignalCount = job.GetSelectedSignalIds(ref selectedSignalIds);
                 List<int> ids = new List<int>(selectedSignalCount);
                 for (int i = 1; i <= selectedSignalCount; i++)    // e3 в [0] всегда возвращает null
                     ids.Add(selectedSignalIds[i]);
+                return ids;
+            }
+        }
+
+        public List<int> SelectedAllDeviceIds
+        {
+            get
+            {
+                dynamic selectedAllDeviceIds = default(dynamic);
+                int selectedAllDeviceCount = job.GetSelectedAllDeviceIds(ref selectedAllDeviceIds);
+                List<int> ids = new List<int>(selectedAllDeviceCount);
+                for (int i = 1; i <= selectedAllDeviceCount; i++)    // e3 в [0] всегда возвращает null
+                    ids.Add(selectedAllDeviceIds[i]);
                 return ids;
             }
         }
@@ -167,7 +214,7 @@ namespace ProELib
             get
             {
                 dynamic connectionIds = default(dynamic);
-                int connectionCount = e3ObjectFabric.GetJob().GetAllConnectionIds(ref connectionIds);
+                int connectionCount = job.GetAllConnectionIds(ref connectionIds);
                 List<int> ids = new List<int>(connectionCount);
                 for (int i = 1; i <= connectionCount; i++)  // e3 в [0] всегда возвращает null
                     ids.Add(connectionIds[i]);
@@ -180,7 +227,7 @@ namespace ProELib
             get
             {
                 dynamic selectedConnectionIds = default(dynamic);
-                int selectionConnectionCount = e3ObjectFabric.GetJob().GetSelectedConnectionIds(ref selectedConnectionIds);
+                int selectionConnectionCount = job.GetSelectedConnectionIds(ref selectedConnectionIds);
                 List<int> ids = new List<int>(selectionConnectionCount);
                 for (int i = 1; i <= selectionConnectionCount; i++)  // e3 в [0] всегда возвращает null
                     ids.Add(selectedConnectionIds[i]);
@@ -193,11 +240,11 @@ namespace ProELib
             get
             {
                 dynamic selectedCableIds = default(dynamic);
-                int selectionCableCount = e3ObjectFabric.GetJob().GetSelectedCableIds(ref selectedCableIds);
+                int selectionCableCount = job.GetSelectedCableIds(ref selectedCableIds);
                 List<int> ids = new List<int>();
                 for (int i = 1; i <= selectionCableCount; i++)  // e3 в [0] всегда возвращает null
                     ids.Add(selectedCableIds[i]);
-                selectionCableCount = e3ObjectFabric.GetJob().GetTreeSelectedCableIds(ref selectedCableIds);
+                selectionCableCount = job.GetTreeSelectedCableIds(ref selectedCableIds);
                 for (int i = 1; i <= selectionCableCount; i++)
                     ids.Add(selectedCableIds[i]);
                 ids = ids.Distinct().ToList();
@@ -210,7 +257,7 @@ namespace ProELib
             get
             {
                 dynamic sheetIds = default(dynamic);
-                int sheetCount = e3ObjectFabric.GetJob().GetSheetIds(ref sheetIds);
+                int sheetCount = job.GetSheetIds(ref sheetIds);
                 List<int> ids = new List<int>(sheetCount);
                 for (int i = 1; i <= sheetCount; i++)
                     ids.Add(sheetIds[i]);
@@ -220,62 +267,67 @@ namespace ProELib
 
         public NormalDevice CreateNormalDevice()
         {
-            return new NormalDevice(0, e3ObjectFabric);
+            return new NormalDevice(job);
         }
 
         public DevicePin CreateDevicePin()
         {
-            return new DevicePin(0, e3ObjectFabric);
+            return new DevicePin(job);
         }
 
         public WireCore CreateWireCore()
         {
-            return new WireCore(0, e3ObjectFabric);
+            return new WireCore(job);
         }
 
         public E3Text CreateText()
         {
-            return new E3Text(0, e3ObjectFabric);
+            return new E3Text(job);
         }
 
         public Graphic CreateGraphic()
         {
-            return new Graphic(0, e3ObjectFabric);
+            return new Graphic(job);
         }
 
         public Group CreateGroup()
         {
-            return new Group(0, e3ObjectFabric);
+            return new Group(job);
         }
 
         public Sheet CreateSheet()
         {
-            return new Sheet(0, e3ObjectFabric);
+            return new Sheet(job);
         }
 
         public Signal CreateSignal()
         {
-            return new Signal(0, e3ObjectFabric);
+            return new Signal(job);
         }
 
         public Net CreateNet()
         {
-            return new Net(0, e3ObjectFabric);
+            return new Net(job);
+        }
+
+        public NetSegment CreateNetSegment()
+        {
+            return new NetSegment(job);
         }
 
         public Symbol CreateSymbol()
         {
-            return new Symbol(0, e3ObjectFabric);
+            return new Symbol(job);
         }
 
         public Connection CreateConnection()
         {
-            return new Connection(0, e3ObjectFabric);
+            return new Connection(job);
         }
 
         public Outline CreateOutline()
         {
-            return new Outline(0, e3ObjectFabric);
+            return new Outline(job);
         }
 
         public List<int> GetSheetIdsByType(int schematicTypeCode)
@@ -293,17 +345,28 @@ namespace ProELib
 
         public int JumpToId(int id)
         {
-            return e3ObjectFabric.GetJob().JumpToID(id);
+            return job.JumpToID(id);
         }
 
         public void PutInfo(string value)
         {
-            e3ObjectFabric.GetApplication().PutInfo(0, value);
+            app.PutInfo(0, value);
+        }
+
+        public RGB GetRGB(int code)
+        {
+            dynamic r = default(dynamic);
+            dynamic g = default(dynamic);
+            dynamic b = default(dynamic);
+            job.GetRGBValue(code, ref r, ref g, ref b);
+            return new RGB((byte)r, (byte)g, (byte)b);
         }
 
         public void Release()
         {
-            e3ObjectFabric.Release();
+            app.Quit();
+            Marshal.FinalReleaseComObject(app);
+            Marshal.FinalReleaseComObject(job);
         }
 
     }
