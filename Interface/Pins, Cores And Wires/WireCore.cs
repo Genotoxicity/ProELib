@@ -10,13 +10,13 @@ namespace ProELib
             {
                 dynamic wireType = default(dynamic);
                 dynamic wireName = default(dynamic);
-                pin.GetWireType(ref wireType, ref wireName);
+                e3Pin.GetWireType(ref wireType, ref wireName);
                 return wireType;
             }
         }
 
-        internal WireCore(e3Job job)
-            : base(job)
+        internal WireCore(e3Pin e3Pin)
+            : base(e3Pin)
         {
         }
     }

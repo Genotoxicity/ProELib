@@ -6,51 +6,23 @@ namespace ProELib
 {
     public class E3Text
     {
-        private e3Text text;
-        private e3Graph graph;
+        private e3Text e3Text;
 
         public int Id
         {
             get
             {
-                return text.GetId();
+                return e3Text.GetId();
             }
             set
             {
-                text.SetId(value);
+                e3Text.SetId(value);
             }
         }
 
-        internal E3Text(e3Job job)
+        internal E3Text(e3Text e3Text)
         {
-            text = job.CreateTextObject();
-            graph = job.CreateGraphObject();
-        }
-
-        public int CreateText(int sheetId, string value, double x, double y)
-        {
-            Id = graph.CreateText(sheetId, value, x, y);
-            return Id;
-        }
-
-        public int CreateText(int sheetId, string value, double x, double y, E3Font font)
-        {
-            Id = graph.CreateText(sheetId, value, x, y);
-            SetFont(font);
-            return Id;
-        }
-
-        public int CreateVerticalText(int sheetId, string value, double x, double y)
-        {
-            Id = graph.CreateRotatedText(sheetId, value, x, y, 90);
-            return Id;
-        }
-
-        public int CreateVerticalText(int sheetId, string value, double x, double y, E3Font font)
-        {
-            Id = graph.CreateRotatedText(sheetId, value, x, y, 90);
-            SetFont(font);
-            return Id;
+            this.e3Text = e3Text;
         }
 
         public double GetTextLength(string value, E3Font font)
@@ -59,7 +31,7 @@ namespace ProELib
                 return 0;
             dynamic xArray = default(dynamic);
             dynamic yArray = default(dynamic);
-            text.CalculateBoxAt(0, value, 0, 0, 0, font.height, (int)font.mode, (int)font.style, font.name, 0, 0, ref xArray, ref yArray); // в качестве начальных координат для простоты устанавливаем 0, 0
+            e3Text.CalculateBoxAt(0, value, 0, 0, 0, font.height, (int)font.mode, (int)font.style, font.name, 0, 0, ref xArray, ref yArray); // в качестве начальных координат для простоты устанавливаем 0, 0
             return (double)xArray[2];    // координата X второго угла textBox
         }
 
@@ -69,7 +41,7 @@ namespace ProELib
                 return new Size(0, 0);
             dynamic xArray = default(dynamic);
             dynamic yArray = default(dynamic);
-            text.CalculateBoxAt(0, value, 0, 0, rotation, font.height, (int)font.mode, (int)font.style, font.name, 0, 0, ref xArray, ref yArray); // в качестве начальных координат для простоты устанавливаем 0, 0
+            e3Text.CalculateBoxAt(0, value, 0, 0, rotation, font.height, (int)font.mode, (int)font.style, font.name, 0, 0, ref xArray, ref yArray); // в качестве начальных координат для простоты устанавливаем 0, 0
             double xMax = double.MinValue;
             double yMax = double.MinValue;
             double xMin = double.MaxValue;
@@ -100,12 +72,12 @@ namespace ProELib
 
         public E3Font GetFont()
         {
-            string fontName = text.GetFontName();
-            double height = text.GetHeight();
-            Alignment alignment = (Alignment)text.GetAlignment();
-            Mode mode = (Mode)text.GetMode();
-            Styles style = (Styles)text.GetStyle();
-            int color = text.GetColour();
+            string fontName = e3Text.GetFontName();
+            double height = e3Text.GetHeight();
+            Alignment alignment = (Alignment)e3Text.GetAlignment();
+            Mode mode = (Mode)e3Text.GetMode();
+            Styles style = (Styles)e3Text.GetStyle();
+            int color = e3Text.GetColour();
             return new E3Font(fontName, height, alignment, mode, style, color);
         }
 
@@ -113,12 +85,12 @@ namespace ProELib
         {
             if (font != null)
             {
-                text.SetFontName(font.name);
-                text.SetHeight(font.height);
-                text.SetAlignment((int)font.alignment);
-                text.SetMode((int)font.mode);
-                text.SetStyle((int)font.style);
-                text.SetColour(font.ColorIndex);
+                e3Text.SetFontName(font.name);
+                e3Text.SetHeight(font.height);
+                e3Text.SetAlignment((int)font.alignment);
+                e3Text.SetMode((int)font.mode);
+                e3Text.SetStyle((int)font.style);
+                e3Text.SetColour(font.ColorIndex);
             }
         }
 
@@ -126,7 +98,7 @@ namespace ProELib
         {
             dynamic width = default(dynamic);
             dynamic height = default(dynamic);
-            text.GetBox(ref width, ref height);
+            e3Text.GetBox(ref width, ref height);
             if (width != null && height != null)
                 return new Size((double)width, (double)height);
             else
@@ -135,18 +107,18 @@ namespace ProELib
 
         public int SetBox(double width, double height)
         {
-            return text.SetBox(width, height);
+            return e3Text.SetBox(width, height);
         }
 
         public int SetBox(Size size)
         {
-            return text.SetBox(size.Width, size.Height);
+            return e3Text.SetBox(size.Width, size.Height);
         }
 
         public Point GetLocation()
         {
             dynamic xCoordinate = default(dynamic), yCoordinate = default(dynamic), grid = default(dynamic);
-            text.GetSchemaLocation(ref xCoordinate, ref yCoordinate, ref grid);
+            e3Text.GetSchemaLocation(ref xCoordinate, ref yCoordinate, ref grid);
             if (xCoordinate != null && yCoordinate != null)
                 return new Point(xCoordinate, yCoordinate);
             else
@@ -155,22 +127,22 @@ namespace ProELib
 
         public int SetLocation(double x, double y)
         {
-            return text.SetSchemaLocation(x,y);
+            return e3Text.SetSchemaLocation(x,y);
         }
 
         public int SetLocation(Point position)
         {
-            return text.SetSchemaLocation(position.X, position.Y);
+            return e3Text.SetSchemaLocation(position.X, position.Y);
         }
 
         public string GetText()
         {
-            return text.GetText();
+            return e3Text.GetText();
         }
 
         public int SetText(string value)
         {
-            return text.SetText(value);
+            return e3Text.SetText(value);
         }
     }
 }

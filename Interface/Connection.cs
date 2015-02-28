@@ -7,14 +7,14 @@ namespace ProELib
 {
     public class Connection
     {
-        private e3Connection connection;
+        private e3Connection e3Connection;
 
         public List<int> PinIds
         {
             get
             {
                 dynamic connectionPinIds = default(dynamic);
-                int pinCount = connection.GetPinIds(ref connectionPinIds);
+                int pinCount = e3Connection.GetPinIds(ref connectionPinIds);
                 List<int> ids = new List<int>(pinCount);
                 for (int i = 1; i <= pinCount; i++)
                     ids.Add(connectionPinIds[i]);
@@ -27,7 +27,7 @@ namespace ProELib
             get
             {
                 dynamic symbolIds = default(dynamic);
-                int symbolCount = connection.GetReferenceSymbolIds(ref symbolIds);
+                int symbolCount = e3Connection.GetReferenceSymbolIds(ref symbolIds);
                 List<int> ids = new List<int>(symbolCount);
                 for (int i = 1; i <= symbolCount; i++)
                     ids.Add(symbolIds[i]);
@@ -39,11 +39,11 @@ namespace ProELib
         {
             get
             {
-                return connection.GetId();
+                return e3Connection.GetId();
             }
             set
             {
-                connection.SetId(value);
+                e3Connection.SetId(value);
             }
         }
 
@@ -51,13 +51,13 @@ namespace ProELib
         {
             get
             {
-                return connection.GetName();
+                return e3Connection.GetName();
             }
         }
 
-        internal Connection(e3Job job)
+        internal Connection(e3Connection e3Connection)
         {
-            connection = job.CreateConnectionObject();
+            this.e3Connection = e3Connection;
         }
 
         public bool IsUnique()
@@ -67,7 +67,7 @@ namespace ProELib
 
         public void Highlight()
         {
-            connection.Highlight();
+            e3Connection.Highlight();
         }
 
         public int Create(int sheetId, List<Point> points)
@@ -82,7 +82,7 @@ namespace ProELib
                 arrayOfX.SetValue(points[i].X, i + 1);
                 arrayOfY.SetValue(points[i].Y, i + 1);
             }
-            return connection.Create(sheetId, pointCount, ref arrayOfX, ref arrayOfY);
+            return e3Connection.Create(sheetId, pointCount, ref arrayOfX, ref arrayOfY);
         }
 
     }

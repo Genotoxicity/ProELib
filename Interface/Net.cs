@@ -5,17 +5,17 @@ namespace ProELib
 {
     public class Net
     {
-        private e3Net net;
+        private e3Net e3Net;
 
         public int Id
         {
             get
             {
-                return net.GetId();
+                return e3Net.GetId();
             }
             set
             {
-                net.SetId(value);
+                e3Net.SetId(value);
             }
         }
 
@@ -24,7 +24,7 @@ namespace ProELib
             get
             {
                 dynamic netSegmentIds = default(dynamic);
-                int netSegmentCount = net.GetNetSegmentIds(ref netSegmentIds);
+                int netSegmentCount = e3Net.GetNetSegmentIds(ref netSegmentIds);
                 List<int> ids = new List<int>(netSegmentCount);
                 for (int i = 1; i <= netSegmentCount; i++)
                     ids.Add(netSegmentIds[i]);
@@ -36,13 +36,13 @@ namespace ProELib
         {
             get
             {
-                return (net.IsSignalTransferred()==1);
+                return (e3Net.IsSignalTransferred()==1);
             }
         }
 
-        internal Net(e3Job job)
+        internal Net(e3Net e3Net)
         {
-            net = job.CreateNetObject();
+            this.e3Net = e3Net;
         }
 
         public bool TrySetTransferSignal(bool netTransferSignal)
@@ -50,7 +50,7 @@ namespace ProELib
             int transferSignal = 0;
             if (netTransferSignal)
                 transferSignal = 1;
-            return (net.SetTransferSignal(transferSignal) == 0);
+            return (e3Net.SetTransferSignal(transferSignal) == 0);
         }
     }
 }

@@ -7,22 +7,24 @@ namespace ProELib
 {
     public class E3Project
     {
+        private int processId;
         private e3Application app;
         private e3Job job;
-        private int processId;
+        private e3Component e3Component;
+        private e3Connection e3Connection;
+        private e3Text e3Text;
+        private e3Graph e3Graph;
+        private e3Group e3Group;
+        private e3Net e3Net;
+        private e3NetSegment e3NetSegment;
+        private e3Outline e3Outline;
+        private e3Sheet e3Sheet;
+        private e3Signal e3Signal;
+        private e3Symbol e3Symbol;
+        private e3Device e3Device;
+        private e3Pin e3Pin;
 
-        private int undefinedId = -1;
         private int wireGroupId = 0;
-
-        private int WireGroupId
-        {
-            get
-            {
-                if (wireGroupId == 0)
-                    wireGroupId = GetWireGroupId();
-                return wireGroupId;
-            }
-        }
 
         public E3Project(int applicationProcessId)
         {
@@ -30,37 +32,74 @@ namespace ProELib
             processId = applicationProcessId;
             app = dispatcher.GetE3ByProcessId(processId) as e3Application;
             job = app.CreateJobObject();
+            e3Component = job.CreateComponentObject();
+            e3Connection = job.CreateConnectionObject();
+            e3Text = job.CreateTextObject();
+            e3Graph = job.CreateGraphObject();
+            e3Group = job.CreateGroupObject();
+            e3Net = job.CreateNetObject();
+            e3NetSegment = job.CreateNetSegmentObject();
+            e3Outline = job.CreateOutlineObject();
+            e3Sheet = job.CreateSheetObject();
+            e3Signal = job.CreateSignalObject();
+            e3Symbol = job.CreateSymbolObject();
+            e3Device = job.CreateDeviceObject();
+            e3Pin = job.CreatePinObject();
+            CableDevice = new CableDevice(e3Device);
+            NormalDevice = new NormalDevice(e3Device, e3Pin);
+            Component = new Component(e3Component);
+            CableCore = new CableCore(e3Pin);
+            DevicePin = new DevicePin(e3Pin);
+            WireCore = new WireCore(e3Pin);
+            E3Text = new E3Text(e3Text);
+            Graphic = new Graphic(e3Graph);
+            Group = new Group(e3Group);
+            Sheet = new Sheet(e3Sheet);
+            Signal = new Signal(e3Signal);
+            Net = new Net(e3Net);
+            NetSegment = new NetSegment(e3NetSegment);
+            Symbol = new Symbol(e3Symbol);
+            Connection = new Connection(e3Connection);
+            Outline = new Outline(e3Outline);
+        }
+
+        #region Ids Properties
+        private int WireGroupId
+        {
+            get
+            {
+                if (wireGroupId == 0)
+                {
+                    dynamic cableIds = default(dynamic);
+                    int cableCount = job.GetCableIds(ref cableIds);
+                    for (int i = 1; i <= cableCount; i++)
+                    {
+                        e3Device.SetId(cableIds[i]);
+                        if (e3Device.IsWireGroup() == 1)  // определение устройства "Провода" содержащего в себе все провода в проекте
+                        {
+                            wireGroupId = cableIds[i];
+                            break;
+                        }
+                    }
+                }
+                return wireGroupId;
+            }
         }
 
         public List<int> WireIds
         {
             get
             {
-                if (WireGroupId == undefinedId)   // если проводов не найдено
+                if (WireGroupId == 0)   // если проводов не найдено
                     return new List<int>(0);   // возвращаем пустой список
-                e3Device wireGroup = job.CreateDeviceObject();
-                wireGroup.SetId(WireGroupId);
+                e3Device.SetId(WireGroupId);
                 dynamic wireIds = default(dynamic);
-                int wireCount = wireGroup.GetCoreIds(ref wireIds);
+                int wireCount = e3Device.GetCoreIds(ref wireIds);
                 List<int> ids = new List<int>(wireCount);
                 for (int i = 1; i <= wireCount; i++)    // e3 в [0] всегда возвращает null
                     ids.Add(wireIds[i]);
                 return ids;
             }
-        }
-
-        private int GetWireGroupId()
-        {
-            dynamic cableIds = default(dynamic);
-            int cableCount = job.GetCableIds(ref cableIds);
-            e3Device device = job.CreateDeviceObject();
-            for (int i = 1; i <= cableCount; i++)
-            {
-                device.SetId(cableIds[i]);
-                if (device.IsWireGroup() == 1)  // определение устройства "Провода" содержащего в себе все провода в проекте
-                    return cableIds[i];
-            }
-            return undefinedId;   // если проводов не найдено
         }
 
         public List<int> CableIds
@@ -153,21 +192,6 @@ namespace ProELib
                     ids.Add(treeSelectedSheetIds[i]);
                 return ids;
             }
-        }
-
-        public CableDevice CreateCableDevice()
-        {
-            return new CableDevice(job);
-        }
-
-        public Component CreateComponent()
-        {
-            return new Component(job);
-        }
-
-        public CableCore CreateCableCore()
-        {
-            return new CableCore(job);
         }
 
         public List<int> SignalIds
@@ -264,82 +288,51 @@ namespace ProELib
                 return ids;
             }
         }
+        #endregion
 
-        public NormalDevice CreateNormalDevice()
-        {
-            return new NormalDevice(job);
-        }
+        public CableDevice CableDevice {get; private set;}
 
-        public DevicePin CreateDevicePin()
-        {
-            return new DevicePin(job);
-        }
+        public NormalDevice NormalDevice { get; private set; }
 
-        public WireCore CreateWireCore()
-        {
-            return new WireCore(job);
-        }
+        public Component Component { get; private set; }
 
-        public E3Text CreateText()
-        {
-            return new E3Text(job);
-        }
+        public CableCore CableCore { get; private set; }
 
-        public Graphic CreateGraphic()
-        {
-            return new Graphic(job);
-        }
+        public DevicePin DevicePin { get; private set; }
 
-        public Group CreateGroup()
-        {
-            return new Group(job);
-        }
+        public WireCore WireCore { get; private set; }
 
-        public Sheet CreateSheet()
-        {
-            return new Sheet(job);
-        }
+        public E3Text E3Text { get; private set; }
 
-        public Signal CreateSignal()
-        {
-            return new Signal(job);
-        }
+        public Graphic Graphic { get; private set; }
 
-        public Net CreateNet()
-        {
-            return new Net(job);
-        }
+        public Group Group { get; private set; }
 
-        public NetSegment CreateNetSegment()
-        {
-            return new NetSegment(job);
-        }
+        public Sheet Sheet { get; private set; }
 
-        public Symbol CreateSymbol()
-        {
-            return new Symbol(job);
-        }
+        public Signal Signal { get; private set; }
 
-        public Connection CreateConnection()
-        {
-            return new Connection(job);
-        }
+        public Net Net { get; private set; }
 
-        public Outline CreateOutline()
-        {
-            return new Outline(job);
-        }
+        public NetSegment NetSegment { get; private set; }
+
+        public Symbol Symbol { get; private set; }
+
+        public Connection Connection { get; private set; }
+
+        public Outline Outline { get; private set; }
 
         public List<int> GetSheetIdsByType(int schematicTypeCode)
         {
-            Sheet sheet = CreateSheet();
+            int originalId = Sheet.Id;
             List<int> ids = new List<int>();
             foreach (int sheetId in SheetIds)
             {
-                sheet.Id = sheetId;
-                if (sheet.SchematicTypes.Contains(schematicTypeCode))
+                Sheet.Id = sheetId;
+                if (Sheet.SchematicTypes.Contains(schematicTypeCode))
                     ids.Add(sheetId);
             }
+            Sheet.Id = originalId;
             return ids;
         }
 

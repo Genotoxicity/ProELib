@@ -5,20 +5,17 @@ namespace ProELib
 {
     public class Device
     {
-        protected e3Job job;
-        protected e3Device device;
-        protected Component component;
+        protected e3Device e3Device;
 
         public virtual int Id
         {
             get
             {
-                return device.GetId();
+                return e3Device.GetId();
             }
             set
             {
-                device.SetId(value);
-                Component.Id = value;
+                e3Device.SetId(value);
             }
         }
 
@@ -26,32 +23,11 @@ namespace ProELib
         {
             get
             {
-                return device.GetName();
+                return e3Device.GetName();
             }
             set
             {
-                device.SetName(value);
-            }
-        }
-
-        protected Component Component
-        {
-            get
-            {
-                if (component == null)
-                {
-                    component = new Component(job);
-                    component.Id = Id;
-                }
-                return component;
-            }
-        }
-
-        public string ComponentName
-        {
-            get
-            {
-                return Component.Name;
+                e3Device.SetName(value);
             }
         }
 
@@ -59,7 +35,7 @@ namespace ProELib
         {
             get
             {
-                return device.GetAssignment();
+                return e3Device.GetAssignment();
             }
         }
 
@@ -67,7 +43,7 @@ namespace ProELib
         {
             get
             {
-                return device.GetLocation();
+                return e3Device.GetLocation();
             }
         }
 
@@ -76,7 +52,7 @@ namespace ProELib
             get
             {
                 dynamic pinIds = default(dynamic);
-                int pinCount = device.GetPinIds(ref pinIds);
+                int pinCount = e3Device.GetPinIds(ref pinIds);
                 List<int> ids = new List<int>(pinCount);
                 for (int i = 1; i <= pinCount; i++)
                     ids.Add(pinIds[i]);
@@ -88,73 +64,67 @@ namespace ProELib
         {
             get
             {
-                return device.GetPinCount();
+                return e3Device.GetPinCount();
             }
         }
 
-        protected Device(e3Job job)
+        protected Device(e3Device e3Device)
         {
-            this.job = job;
-            device = job.CreateDeviceObject();
+            this.e3Device = e3Device;
         }
 
         public bool IsCable()
         {
-            if (device.IsCable() == 1)
+            if (e3Device.IsCable() == 1)
                 return true;
             return false;
         }
 
         public bool IsWireGroup()
         {
-            if (device.IsWireGroup() == 1)
+            if (e3Device.IsWireGroup() == 1)
                 return true;
             return false;
         }
 
         public bool IsTerminal()
         {
-            if (device.IsTerminal() == 1)
+            if (e3Device.IsTerminal() == 1)
                 return true;
             return false;
         }
 
         public bool IsMount()
         {
-            if (device.IsMount() == 1)
+            if (e3Device.IsMount() == 1)
                 return true;
             return false;
         }
 
         public bool IsCableDuct()
         {
-            if (device.IsCableDuct() == 1)
+            if (e3Device.IsCableDuct() == 1)
                 return true;
             return false;
         }
 
         public bool IsHose()
         {
-            if (device.IsHose() == 1)
+            if (e3Device.IsHose() == 1)
                 return true;
             return false;
         }
 
         public bool IsBlock()
         {
-            if (device.IsBlock() == 1)
+            if (e3Device.IsBlock() == 1)
                 return true;
             return false;
         }
 
         public string GetAttributeValue(string attributeName)
         {
-            return device.GetAttributeValue(attributeName);
-        }
-
-        public string GetComponentAttributeValue(string attributeName)
-        {
-            return Component.GetAttributeValue(attributeName);
+            return e3Device.GetAttributeValue(attributeName);
         }
 
     }

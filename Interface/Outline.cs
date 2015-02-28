@@ -9,17 +9,17 @@ namespace ProELib
 {
     public class Outline
     {
-        private e3Outline outline;
+        private e3Outline e3Outline;
 
         public int Id
         {
             get
             {
-                return outline.GetId();
+                return e3Outline.GetId();
             }
             set
             {
-                outline.SetId(value);
+                e3Outline.SetId(value);
             }
         }
 
@@ -27,13 +27,13 @@ namespace ProELib
         {
             get
             {
-                return (OutlineType)outline.GetType();
+                return (OutlineType)e3Outline.GetType();
             }
         }
 
-        internal Outline(e3Job job)
+        internal Outline(e3Outline e3Outline)
         {
-            outline = job.CreateOutlineObject();
+            this.e3Outline = e3Outline;
         }
 
         public int GetPosition(out double x, out double y, out double z)
@@ -41,7 +41,7 @@ namespace ProELib
             dynamic dx = default(dynamic);
             dynamic dy = default(dynamic);
             dynamic dz = default(dynamic);
-            int code = outline.GetPosition(ref dx, ref dy, ref dz);
+            int code = e3Outline.GetPosition(ref dx, ref dy, ref dz);
             x = (double) dx;
             y = (double) dy;
             z = (double) dz;
@@ -53,7 +53,7 @@ namespace ProELib
             List<Point> points;
             dynamic xarr = default(dynamic);
             dynamic yarr = default(dynamic);
-            int pointCount = outline.GetPath(ref xarr, ref yarr);
+            int pointCount = e3Outline.GetPath(ref xarr, ref yarr);
             if (pointCount > 0)
             {
                 points = new List<Point>(pointCount);

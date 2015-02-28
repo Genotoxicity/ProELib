@@ -6,7 +6,7 @@ namespace ProELib
 {
     public class Sheet
     {
-        private e3Sheet sheet;
+        private e3Sheet e3Sheet;
         private OrdinateDirection ordinateDirection;
         private AbscissaDirection abscissaDirection;
         private Area drawingArea;
@@ -16,11 +16,11 @@ namespace ProELib
         {
             get
             {
-                return sheet.GetId();
+                return e3Sheet.GetId();
             }
             set
             {
-                sheet.SetId(value);
+                e3Sheet.SetId(value);
                 SetAxesDirections();
                 isDrawingAreaGot = false;
             }
@@ -30,12 +30,12 @@ namespace ProELib
         {
             get
             {
-                return sheet.GetName();
+                return e3Sheet.GetName();
             }
             set
             {
                 if (String.IsNullOrEmpty(value))
-                    sheet.SetName(value.Replace(' ', '_'));
+                    e3Sheet.SetName(value.Replace(' ', '_'));
             }
         }
 
@@ -44,7 +44,7 @@ namespace ProELib
             get
             {
                 dynamic schematicTypes = default(dynamic);
-                int schematicTypeCount = sheet.GetSchematicTypes(ref schematicTypes);
+                int schematicTypeCount = e3Sheet.GetSchematicTypes(ref schematicTypes);
                 List<int> types = new List<int>(schematicTypeCount);
                 for (int i = 1; i <= schematicTypeCount; i++)
                     types.Add(schematicTypes[i]);
@@ -57,7 +57,7 @@ namespace ProELib
             get
             {
                 dynamic symbolIds = default(dynamic);
-                int symbolCount = sheet.GetSymbolIds(ref symbolIds);
+                int symbolCount = e3Sheet.GetSymbolIds(ref symbolIds);
                 List<int> ids = new List<int>(symbolCount);
                 for (int i = 1; i <= symbolCount; i++)
                     ids.Add(symbolIds[i]);
@@ -70,7 +70,7 @@ namespace ProELib
             get
             {
                 dynamic insideSymbolIds = default(dynamic);
-                int insideSymbolCount = sheet.GetInsideSymbolIds(ref insideSymbolIds);
+                int insideSymbolCount = e3Sheet.GetInsideSymbolIds(ref insideSymbolIds);
                 List<int> ids = new List<int>(insideSymbolCount);
                 for (int i = 1; i <= insideSymbolCount; i++)
                     ids.Add(insideSymbolIds[i]);
@@ -83,7 +83,7 @@ namespace ProELib
             get
             {
                 dynamic graphicIds = default(dynamic);
-                int graphicCount = sheet.GetGraphIds(ref graphicIds);
+                int graphicCount = e3Sheet.GetGraphIds(ref graphicIds);
                 List<int> ids = new List<int>(graphicCount);
                 for (int i = 1; i <= graphicCount; i++)
                     ids.Add(graphicIds[i]);
@@ -96,7 +96,7 @@ namespace ProELib
             get
             {
                 dynamic groupIds = default(dynamic);
-                int groupCount = sheet.GetGroupIds(ref groupIds);
+                int groupCount = e3Sheet.GetGroupIds(ref groupIds);
                 List<int> ids = new List<int>(groupCount);
                 for (int i = 1; i <= groupCount; i++)
                     ids.Add(groupIds[i]);
@@ -109,7 +109,7 @@ namespace ProELib
             get
             { 
                 dynamic embeddedSheetIds = default(dynamic);
-                int embeddedSheetCount = sheet.GetEmbeddedSheetIds(ref embeddedSheetIds);
+                int embeddedSheetCount = e3Sheet.GetEmbeddedSheetIds(ref embeddedSheetIds);
                 List<int> ids = new List<int>(embeddedSheetCount);
                 for (int i = 1; i <= embeddedSheetCount; i++)
                     ids.Add(embeddedSheetIds[i]);
@@ -121,7 +121,7 @@ namespace ProELib
         {
             get
             {
-                return sheet.GetParentSheetId();
+                return e3Sheet.GetParentSheetId();
             }
         }
 
@@ -142,13 +142,13 @@ namespace ProELib
         {
             get
             {
-                return sheet.IsPanel() > 0 ? true : false;
+                return e3Sheet.IsPanel() > 0 ? true : false;
             }
         }
 
-        internal Sheet(e3Job job)
+        internal Sheet(e3Sheet e3Sheet)
         {
-            sheet = job.CreateSheetObject();
+            this.e3Sheet = e3Sheet;
             SetAxesDirections();
             isDrawingAreaGot = false;
         }
@@ -159,7 +159,7 @@ namespace ProELib
             dynamic yBottom = default(dynamic);
             dynamic xRight = default(dynamic);
             dynamic yTop = default(dynamic);
-            sheet.GetDrawingArea(ref xLeft, ref yBottom, ref xRight, ref yTop);
+            e3Sheet.GetDrawingArea(ref xLeft, ref yBottom, ref xRight, ref yTop);
             if (yTop < yBottom)
                 ordinateDirection = OrdinateDirection.TopToBottom;
             else
@@ -266,7 +266,7 @@ namespace ProELib
 
         public int Create(string name, string format, int targetSheetId, InsertPosition position)
         {
-            int newSheetId = sheet.Create(0, name, format, targetSheetId, (int)position);
+            int newSheetId = e3Sheet.Create(0, name, format, targetSheetId, (int)position);
             Id = newSheetId;
             return newSheetId;
         }
@@ -275,7 +275,7 @@ namespace ProELib
         {
             if (Id > 0)
             {
-                int result = sheet.Delete();
+                int result = e3Sheet.Delete();
                 Id = 0;
                 return result;
             }
@@ -284,23 +284,23 @@ namespace ProELib
 
         public void ExportImage(string fileName, string fileFormat)
         {
-            sheet.ExportImage(fileFormat, 0, fileName);
+            e3Sheet.ExportImage(fileFormat, 0, fileName);
         }
 
         public string GetAttributeValue(string attribute)
         {
-            return sheet.GetAttributeValue(attribute);
+            return e3Sheet.GetAttributeValue(attribute);
         }
 
         public void SetAttribute(string attribute, string value)
         {
-            sheet.SetAttributeValue(attribute, value);
+            e3Sheet.SetAttributeValue(attribute, value);
         }
 
         public List<int> GetTextIds(int typeCode)
         {
             dynamic textIds = default(dynamic);
-            int textCount = sheet.GetTextIds(ref textIds, typeCode);
+            int textCount = e3Sheet.GetTextIds(ref textIds, typeCode);
             List<int> ids = new List<int>(textCount);
             for (int i = 1; i <= textCount; i++)
                 ids.Add(textIds[i]);
@@ -310,7 +310,7 @@ namespace ProELib
         private Area GetDrawingArea()
         { 
             dynamic xMin = default(dynamic), yMin = default(dynamic), xMax = default(dynamic), yMax = default(dynamic);
-            sheet.GetDrawingArea(ref xMin, ref yMin, ref xMax, ref yMax);
+            e3Sheet.GetDrawingArea(ref xMin, ref yMin, ref xMax, ref yMax);
             return new Area(xMin, xMax, yMax, yMin);
         }
     }

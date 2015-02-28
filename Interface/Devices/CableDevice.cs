@@ -10,7 +10,7 @@ namespace ProELib
             get
             {
                 dynamic cableCoreIds = default(dynamic);
-                int coreCount = device.GetAllCoreIds(ref cableCoreIds);
+                int coreCount = e3Device.GetAllCoreIds(ref cableCoreIds);
                 List<int> ids = new List<int>(coreCount);
                 for (int i = 1; i <= coreCount; i++)
                     ids.Add(cableCoreIds[i]);
@@ -18,8 +18,8 @@ namespace ProELib
             }
         }
 
-        internal CableDevice(e3Job job)
-            : base(job)
+        internal CableDevice(e3Device e3Device)
+            : base(e3Device)
         {
         }
     }

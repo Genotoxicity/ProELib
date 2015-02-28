@@ -5,17 +5,17 @@ namespace ProELib
 {
     public class Graphic
     {
-        private e3Graph graph;
+        private e3Graph e3Graph;
 
         public int Id
         {
             get
             {
-                return graph.GetId();
+                return e3Graph.GetId();
             }
             set
             {
-                graph.SetId(value);
+                e3Graph.SetId(value);
             }
         }
 
@@ -24,7 +24,7 @@ namespace ProELib
             get
             {
                 dynamic graphicIds = default(dynamic);
-                int graphicCount = graph.GetGraphIds(ref graphicIds);
+                int graphicCount = e3Graph.GetGraphIds(ref graphicIds);
                 List<int> ids = new List<int>(graphicCount);
                 for (int i = 1; i <= graphicCount; i++)
                     ids.Add(graphicIds[i]);
@@ -32,95 +32,107 @@ namespace ProELib
             }
         }
 
-        internal Graphic(e3Job job)
+        internal Graphic(e3Graph e3Graph)
         {
-            graph = job.CreateGraphObject();
+            this.e3Graph = e3Graph;
         }
 
         public int CreateLine(int sheetId, double x1, double y1, double x2, double y2)
         {
-            Id = graph.CreateLine(sheetId, x1, y1, x2, y2);
+            Id = e3Graph.CreateLine(sheetId, x1, y1, x2, y2);
             return Id;
         }
 
         public int CreateLine(int sheetId, double x1, double y1, double x2, double y2, int colorIndex)
         {
-            Id = graph.CreateLine(sheetId, x1, y1, x2, y2);
-            graph.SetColour(colorIndex);
+            Id = e3Graph.CreateLine(sheetId, x1, y1, x2, y2);
+            e3Graph.SetColour(colorIndex);
             return Id;
         }
 
         public int CreateLine(int sheetId, double x1, double y1, double x2, double y2, double width)
         {
-            Id = graph.CreateLine(sheetId, x1, y1, x2, y2);
-            graph.SetLineWidth(width);
+            Id = e3Graph.CreateLine(sheetId, x1, y1, x2, y2);
+            e3Graph.SetLineWidth(width);
             return Id;
         }
 
         public int CreateLine(int sheetId, double x1, double y1, double x2, double y2, double width, int colorIndex)
         {
-            Id = graph.CreateLine(sheetId, x1, y1, x2, y2);
-            graph.SetLineWidth(width);
-            graph.SetColour(colorIndex);
+            Id = e3Graph.CreateLine(sheetId, x1, y1, x2, y2);
+            e3Graph.SetLineWidth(width);
+            e3Graph.SetColour(colorIndex);
             return Id;
         }
 
         public int CreateRectangle(int sheetId, double x1, double y1, double x2, double y2)
         {
-            Id = graph.CreateRectangle(sheetId, x1, y1, x2, y2);
+            Id = e3Graph.CreateRectangle(sheetId, x1, y1, x2, y2);
             return Id;
         }
 
         public int CreateRectangle(int sheetId, double x1, double y1, double x2, double y2, double width)
         {
-            Id = graph.CreateRectangle(sheetId, x1, y1, x2, y2);
-            graph.SetLineWidth(width);
+            Id = e3Graph.CreateRectangle(sheetId, x1, y1, x2, y2);
+            e3Graph.SetLineWidth(width);
             return Id;
         }
 
         public int CreateCircle(int sheetId, double x, double y, double radius )
         {
-            Id = graph.CreateCircle(sheetId, x, y, radius);
+            Id = e3Graph.CreateCircle(sheetId, x, y, radius);
             return Id;
         }
 
         public int CreateArc(int sheetId, double x, double y, double radius, double startAngle, double endAngle)
         {
-            Id = graph.CreateArc(sheetId, x, y, radius, startAngle, endAngle);
+            Id = e3Graph.CreateArc(sheetId, x, y, radius, startAngle, endAngle);
             return Id;
         }
 
         public int CreateArc(int sheetId, double x, double y, double radius, double startAngle, double endAngle, double width, int colorIndex)
         {
-            Id = graph.CreateArc(sheetId, x, y, radius, startAngle, endAngle);
-            graph.SetLineWidth(width);
-            graph.SetColour(colorIndex);
+            Id = e3Graph.CreateArc(sheetId, x, y, radius, startAngle, endAngle);
+            e3Graph.SetLineWidth(width);
+            e3Graph.SetColour(colorIndex);
+            return Id;
+        }
+
+        public int CreateText(int sheetId, string value, double x, double y)
+        {
+            Id = e3Graph.CreateText(sheetId, value, x, y);
+            return Id;
+        }
+
+        public int CreateVerticalText(int sheetId, string value, double x, double y)
+        {
+            Id = e3Graph.CreateRotatedText(sheetId, value, x, y, 90);
             return Id;
         }
 
         public double SetLineWidth(double width)
         {
-            return graph.SetLineWidth(width);
+            return e3Graph.SetLineWidth(width);
         }
 
         public double SetLineStyle(int lineStyle)
         {
-            return graph.SetLineStyle(lineStyle);
+            return e3Graph.SetLineStyle(lineStyle);
         }
 
         public int SetColor(int colorIndex)
         {
-            return graph.SetColour(colorIndex);
+            return e3Graph.SetColour(colorIndex);
         }
 
         public int Delete()
         {
-            return graph.Delete();
+            return e3Graph.Delete();
         }
 
         public int CreateFromSymbol(int sheetId, double x, double y, string symbolName, string symbolVersion)
         {
-            return graph.CreateFromSymbol(sheetId, x, y, null, 0, 0, symbolName, symbolVersion);
+            return e3Graph.CreateFromSymbol(sheetId, x, y, null, 0, 0, symbolName, symbolVersion);
         }
     }
 }

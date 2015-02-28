@@ -58,8 +58,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums\AbscissaDirection.cs" />
-    <Compile Include="Enums\ReferenceInOut.cs" />
+    <Compile Include="Enums\ReferenceDirection.cs" />
     <Compile Include="Enums\ReferenceType.cs" />
+    <Compile Include="Enums\SymbolType.cs" />
     <Compile Include="Interface\NetSegment.cs" />
     <Compile Include="Interface\SheetReferenceInfo.cs" />
     <Compile Include="Test\ColorPicker.cs" />
@@ -69,7 +70,7 @@
     <Compile Include="Interface\Devices\SymbolReturnParameter.cs" />
     <Compile Include="Interface\Net.cs" />
     <Compile Include="Interface\Outline.cs" />
-    <Compile Include="Interface\OutlineType.cs" />
+    <Compile Include="Enums\OutlineType.cs" />
     <Compile Include="Enums\SymbolTransformation.cs" />
     <Compile Include="Interface\Signal.cs" />
     <Compile Include="Interface\Symbol.cs" />
@@ -95,7 +96,7 @@
     <Compile Include="Interface\E3Project.cs" />
     <Compile Include="Interface\Pins, Cores And Wires\Pin.cs" />
     <Compile Include="Interface\Sheet.cs" />
-    <Compile Include="Interface\InsertPosition.cs" />
+    <Compile Include="Enums\InsertPosition.cs" />
     <Compile Include="Interface\E3Text.cs" />
     <Compile Include="ApplicationDispatcher\E3ApplicationInfo.cs" />
     <Compile Include="Enums\SelectionStatus.cs" />

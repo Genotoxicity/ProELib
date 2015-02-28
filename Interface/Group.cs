@@ -6,23 +6,23 @@ namespace ProELib
 {
     public class Group
     {
-        private e3Group group;
+        private e3Group e3Group;
 
         public int Id
         {
             get
             {
-                return group.GetId();
+                return e3Group.GetId();
             }
             set
             {
-                group.SetId(value);
+                e3Group.SetId(value);
             }
         }
 
-        internal Group(e3Job job)
+        internal Group(e3Group e3Group)
         {
-            group = job.CreateGroupObject();
+            this.e3Group = e3Group;
         }
 
         public int CreateGroup(List<int> ids)
@@ -33,7 +33,7 @@ namespace ProELib
                 array.SetValue(null, 0);
                 for (int i = 0; i < ids.Count; i++)
                     array.SetValue(ids[i], i + 1);
-                return group.Create(ref array);
+                return e3Group.Create(ref array);
             }
             return 0;
         }

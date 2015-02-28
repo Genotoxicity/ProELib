@@ -5,24 +5,14 @@ namespace ProELib
 {
     public class NormalDevice : Device
     {
-        private DevicePin pin;
-
-        private DevicePin Pin
-        { 
-            get
-            {
-                if (pin == null)
-                    pin = new DevicePin(job);
-                return pin;
-            }
-        }
+        private e3Pin e3Pin;
 
         public List<int> OutlineIds
         {
             get
             {
                 dynamic outlineIds = default(dynamic);
-                int outlineCount = device.GetOutlineIds(ref outlineIds);
+                int outlineCount = e3Device.GetOutlineIds(ref outlineIds);
                 List<int> ids = new List<int>(outlineCount);
                 for (int i = 1; i <= outlineCount; i++)
                     ids.Add(outlineIds[i]);
@@ -35,7 +25,7 @@ namespace ProELib
             get
             {
                 dynamic deviceIds = default(dynamic);
-                int deviceCount = device.GetDeviceIds(ref deviceIds);
+                int deviceCount = e3Device.GetDeviceIds(ref deviceIds);
                 List<int> ids = new List<int>(deviceCount);
                 for (int i = 1; i <= deviceCount; i++)
                     ids.Add(deviceIds[i]);
@@ -47,7 +37,7 @@ namespace ProELib
         {
             get
             {
-                return device.GetCarrierId();
+                return e3Device.GetCarrierId();
             }
         }
 
@@ -55,7 +45,7 @@ namespace ProELib
         {
             get
             {
-                return device.GetTerminalBlockId();
+                return e3Device.GetTerminalBlockId();
             }
         }
 
@@ -65,10 +55,11 @@ namespace ProELib
             {
                 List<int> connectedDeviceIds = new List<int>();
                 int originalId = Id;
+                int originalPinId = e3Pin.GetId();
                 foreach (int pinId in PinIds)
                 {
-                    Pin.Id = pinId;
-                    int connectedPinId = Pin.ConnectedPinId;
+                    e3Pin.SetId(pinId);
+                    int connectedPinId = e3Pin.GetConnectedPinId();
                     if (connectedPinId > 0)
                     {
                         Id = connectedPinId;
@@ -78,20 +69,21 @@ namespace ProELib
                     }
                 }
                 Id = originalId;
+                e3Pin.SetId(originalPinId);
                 return connectedDeviceIds;
             }
         }
 
-        internal NormalDevice(e3Job job)
-            : base(job)
-        { 
-        
+        internal NormalDevice(e3Device e3Device, e3Pin e3Pin)
+            : base(e3Device)
+        {
+            this.e3Pin = e3Pin;
         }
 
         public List<int> GetSymbolIds(SymbolReturnParameter parameter)
         {
             dynamic symbolIds = default(dynamic);
-            int symbolCount = device.GetSymbolIds(ref symbolIds, (int) parameter);
+            int symbolCount = e3Device.GetSymbolIds(ref symbolIds, (int) parameter);
             List<int> ids = new List<int>(symbolCount);
             for (int i = 1; i <= symbolCount; i++)
                 ids.Add(symbolIds[i]);
@@ -100,7 +92,7 @@ namespace ProELib
 
         public int Create2DView(string sheetName, string sheetFormat)
         {
-            return device.Create2DView(0, sheetName, sheetFormat, 0, 0); 
+            return e3Device.Create2DView(0, sheetName, sheetFormat, 0, 0); 
         }
 
     }

@@ -5,17 +5,17 @@ namespace ProELib
 {
     public class NetSegment
     {
-        private e3NetSegment netSegment;
+        private e3NetSegment e3NetSegment;
 
         public int Id
         {
             get
             {
-                return netSegment.GetId();
+                return e3NetSegment.GetId();
             }
             set
             {
-                netSegment.SetId(value);
+                e3NetSegment.SetId(value);
             }
         }
 
@@ -24,7 +24,7 @@ namespace ProELib
             get
             {
                 dynamic nodeIds = default(dynamic);
-                int nodeCount = netSegment.GetNodeIds(ref nodeIds);
+                int nodeCount = e3NetSegment.GetNodeIds(ref nodeIds);
                 List<int> ids = new List<int>(nodeCount);
                 for (int i = 1; i <= nodeCount; i++)
                     ids.Add(nodeIds[i]);
@@ -37,7 +37,7 @@ namespace ProELib
             get
             {
                 dynamic connectedSymbolIds = default(dynamic);
-                int symbolCount = netSegment.GetConnectedSymbolIds(ref connectedSymbolIds);
+                int symbolCount = e3NetSegment.GetConnectedSymbolIds(ref connectedSymbolIds);
                 List<int> ids = new List<int>(symbolCount);
                 for (int i = 1; i <= symbolCount; i++)
                     ids.Add(connectedSymbolIds[i]);
@@ -45,14 +45,14 @@ namespace ProELib
             }
         }
 
-        internal NetSegment(e3Job job)
+        internal NetSegment(e3NetSegment e3NetSegment)
         {
-            netSegment = job.CreateNetSegmentObject();
+            this.e3NetSegment = e3NetSegment;
         }
 
         public void Highlight()
         {
-            netSegment.Highlight();
+            e3NetSegment.Highlight();
         }
 
     }

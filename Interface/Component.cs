@@ -5,17 +5,17 @@ namespace ProELib
 {
     public class Component
     {
-        protected e3Component component;
+        protected e3Component e3Component;
 
         public virtual int Id
         {
             get
             {
-                return component.GetId();
+                return e3Component.GetId();
             }
             set
             {
-                component.SetId(value);
+                e3Component.SetId(value);
             }
         }
 
@@ -23,18 +23,18 @@ namespace ProELib
         {
             get
             {
-                return component.GetName();
+                return e3Component.GetName();
             }
         }
 
-        internal Component(e3Job job)
+        internal Component(e3Component e3Component)
         {
-            component = job.CreateComponentObject();
+            this.e3Component = e3Component;
         }
 
         public string GetAttributeValue(string attributeName)
         {
-            return component.GetAttributeValue(attributeName);
+            return e3Component.GetAttributeValue(attributeName);
         }
 
     }

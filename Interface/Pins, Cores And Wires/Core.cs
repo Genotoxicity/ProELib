@@ -9,7 +9,7 @@ namespace ProELib
         {
             get
             {
-                return pin.GetEndPinId(1);
+                return e3Pin.GetEndPinId(1);
             }
         }
 
@@ -17,7 +17,7 @@ namespace ProELib
         {
             get
             {
-                return pin.GetEndPinId(2);
+                return e3Pin.GetEndPinId(2);
             }
         }
 
@@ -25,12 +25,12 @@ namespace ProELib
         {
             get
             {
-                return new List<int>(2) { pin.GetEndPinId(1), pin.GetEndPinId(2) };
+                return new List<int>(2) { e3Pin.GetEndPinId(1), e3Pin.GetEndPinId(2) };
             }
         }
 
-        internal Core(e3Job job)
-            : base(job)
+        internal Core(e3Pin e3Pin)
+            : base(e3Pin)
         {
         }
     }

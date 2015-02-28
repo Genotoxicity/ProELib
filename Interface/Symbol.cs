@@ -7,7 +7,7 @@ namespace ProELib
 {
     public class Symbol
     {
-        private e3Symbol symbol;
+        private e3Symbol e3Symbol;
         private bool isAreaGot;
         private Area area;
         private Point position;
@@ -28,7 +28,7 @@ namespace ProELib
         {
             get
             {
-                return symbol.IsConnected()==1;
+                return e3Symbol.IsConnected()==1;
             }
         }
 
@@ -49,11 +49,11 @@ namespace ProELib
         {
             get
             {
-                return symbol.GetId();
+                return e3Symbol.GetId();
             }
             set
             {
-                symbol.SetId(value);
+                e3Symbol.SetId(value);
                 isAreaGot = false;
                 isLocationVariablesSet = false;
             }
@@ -63,7 +63,7 @@ namespace ProELib
         {
             get
             {
-                return symbol.GetName();
+                return e3Symbol.GetName();
             }
         }
 
@@ -71,7 +71,7 @@ namespace ProELib
         {
             get
             {
-                return symbol.GetVersion();
+                return e3Symbol.GetVersion();
             }
         }
 
@@ -79,7 +79,7 @@ namespace ProELib
         {
             get
             {
-                return symbol.GetType();
+                return e3Symbol.GetType();
             }
         }
 
@@ -87,7 +87,7 @@ namespace ProELib
         {
             get
             {
-                return symbol.GetTypeName();
+                return e3Symbol.GetTypeName();
             }
         }
 
@@ -95,7 +95,15 @@ namespace ProELib
         {
             get
             {
-                return symbol.GetSymbolTypeName();
+                return e3Symbol.GetSymbolTypeName();
+            }
+        }
+
+        public SymbolType SymbolType
+        {
+            get
+            {
+                return (SymbolType)e3Symbol.GetCode();
             }
         }
 
@@ -104,7 +112,7 @@ namespace ProELib
             get
             {
                 dynamic pinIds = default(dynamic);
-                int pinCount = symbol.GetPinIds(ref pinIds);
+                int pinCount = e3Symbol.GetPinIds(ref pinIds);
                 List<int> ids = new List<int>(pinCount);
                 for (int i = 1; i <= pinCount; i++)
                     ids.Add(pinIds[i]);
@@ -116,7 +124,7 @@ namespace ProELib
         {
             get
             {
-                return symbol.GetPinCount();
+                return e3Symbol.GetPinCount();
             }
         }
 
@@ -125,15 +133,15 @@ namespace ProELib
             get
             {
                 dynamic inout, type, refnam, signam;
-                if (symbol.GetSheetReferenceInfo(out inout, out type, out refnam, out signam) == 1)
+                if (e3Symbol.GetSheetReferenceInfo(out inout, out type, out refnam, out signam) == 1)
                     return new SheetReferenceInfo((int)inout, (int)type, (string)signam, (string)refnam);
                 return null;
             }
         }
 
-        internal Symbol(e3Job job)
+        internal Symbol(e3Symbol e3Symbol)
         {
-            symbol = job.CreateSymbolObject();
+            this.e3Symbol = e3Symbol;
             isAreaGot = false;
             isLocationVariablesSet = false;
         }
@@ -141,7 +149,7 @@ namespace ProELib
         public List<int> GetTextIdsOfType(int textType)
         {
             dynamic textIds = default(dynamic);
-            int textCount = symbol.GetTextIds(ref textIds, textType);
+            int textCount = e3Symbol.GetTextIds(ref textIds, textType);
             List<int> ids = new List<int>(textCount);
             for (int i = 1; i <= textCount; i++)
                 ids.Add(textIds[i]);
@@ -151,7 +159,7 @@ namespace ProELib
         public bool IsSchematicTypeOf(int schematicTypeCode)
         {
             dynamic schematicTypes = default(dynamic);
-            int schematicTypeCount = symbol.GetSchematicTypes(ref schematicTypes);
+            int schematicTypeCount = e3Symbol.GetSchematicTypes(ref schematicTypes);
             if (schematicTypeCount == 0)
                 return false;
             for (int i = 1; i <= schematicTypeCount; i++)
@@ -162,7 +170,7 @@ namespace ProELib
 
         public int Place(int sheetId, double x, double y)
         {
-            return symbol.Place(sheetId, x, y);
+            return e3Symbol.Place(sheetId, x, y);
         }
 
         public int Place(int sheetId, double x, double y, SymbolTransformation transformation)
@@ -170,32 +178,32 @@ namespace ProELib
             string rotation = String.Empty;
             if (transformation == SymbolTransformation.HorizontallyMirrored)
                 rotation = "X0";
-            return symbol.Place(sheetId, x, y,rotation);
+            return e3Symbol.Place(sheetId, x, y,rotation);
         }
 
         public int PlaceAsGraphic(int sheetId, double x, double y)
         {
-            return symbol.PlaceAsGraphic(sheetId, x, y, null, 0, 0, 0);
+            return e3Symbol.PlaceAsGraphic(sheetId, x, y, null, 0, 0, 0);
         }
 
         public int Delete()
         {
-            return symbol.Delete();
+            return e3Symbol.Delete();
         }
 
         public int Jump()
         {
-            return symbol.Jump();
+            return e3Symbol.Jump();
         }
 
         public int Load(string name, string version)
         {
-            return symbol.Load(name, version);
+            return e3Symbol.Load(name, version);
         }
 
         public int PlaceInteractively()
         {
-            return symbol.PlaceInteractively();
+            return e3Symbol.PlaceInteractively();
         }
 
         private void SetLocationVariables()
@@ -204,24 +212,24 @@ namespace ProELib
             dynamic dx = default(dynamic);
             dynamic dy = default(dynamic);
             dynamic grid = default(dynamic);
-            sheetId = symbol.GetSchemaLocation(ref dx, ref dy, ref grid);
+            sheetId = e3Symbol.GetSchemaLocation(ref dx, ref dy, ref grid);
             position = new Point((double)dx, (double)dx);
         }
 
         public void SetAttribute(string attribute, string value)
         {
-            symbol.SetAttributeValue(attribute, value);
+            e3Symbol.SetAttributeValue(attribute, value);
         }
 
         public string GetAttribute(string attribute)
         {
-            return symbol.GetAttributeValue(attribute);
+            return e3Symbol.GetAttributeValue(attribute);
         }
 
         private Area GetArea()
         {
             dynamic xMin = default(dynamic), yMin = default(dynamic), xMax = default(dynamic), yMax = default(dynamic);
-            symbol.GetArea(ref xMin, ref yMin, ref xMax, ref yMax);
+            e3Symbol.GetArea(ref xMin, ref yMin, ref xMax, ref yMax);
             return new Area(xMin, xMax, yMax, yMin);
         }
 

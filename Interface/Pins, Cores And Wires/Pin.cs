@@ -1,20 +1,21 @@
-﻿using e3;
+﻿using System.Collections.Generic;
+using e3;
 
 namespace ProELib
 {
     public abstract class Pin
     {
-        protected e3Pin pin;
+        protected e3Pin e3Pin;
 
         public virtual int Id
         {
             get
             {
-                return pin.GetId();
+                return e3Pin.GetId();
             }
             set
             {
-                pin.SetId(value);
+                e3Pin.SetId(value);
             }
         }
 
@@ -22,11 +23,11 @@ namespace ProELib
         {
             get
             {
-                return pin.GetName();
+                return e3Pin.GetName();
             }
             set
             {
-                pin.SetName(value);
+                e3Pin.SetName(value);
             }
         }
 
@@ -34,23 +35,36 @@ namespace ProELib
         {
             get
             {
-                return pin.GetSignalName();
+                return e3Pin.GetSignalName();
             }
             set
             {
-                pin.SetSignalName(value);
+                e3Pin.SetSignalName(value);
             }
 
         }
 
-        protected Pin(e3Job job)
+        public List<int> NodeIds
         {
-            pin = job.CreatePinObject();
+            get
+            {
+                dynamic nodeIds = default(dynamic);
+                int nodeCount = e3Pin.GetNodeIds(ref nodeIds);
+                List<int> ids = new List<int>(nodeCount);
+                for (int i = 1; i <= nodeCount; i++)
+                    ids.Add(nodeIds[i]);
+                return ids;
+            }
+        }
+
+        protected Pin(e3Pin e3Pin)
+        {
+            this.e3Pin = e3Pin ;
         }
 
         public string GetAttributeValue(string attributeName)
         {
-            return pin.GetAttributeValue(attributeName);
+            return e3Pin.GetAttributeValue(attributeName);
         }
     }
 }

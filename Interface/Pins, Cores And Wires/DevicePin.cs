@@ -16,7 +16,7 @@ namespace ProELib
             get
             {
                 dynamic connectedCoreIds = default(dynamic);
-                int coreCount = pin.GetCoreIds(ref connectedCoreIds);
+                int coreCount = e3Pin.GetCoreIds(ref connectedCoreIds);
                 List<int> ids = new List<int>(coreCount);
                 for (int i = 1; i <= coreCount; i++)
                     ids.Add(connectedCoreIds[i]);
@@ -28,7 +28,7 @@ namespace ProELib
         {
             get
             {
-                return pin.GetConnectedPinId();
+                return e3Pin.GetConnectedPinId();
             }
         }
 
@@ -36,7 +36,7 @@ namespace ProELib
         {
             get
             {
-                return pin.GetSequenceNumber();
+                return e3Pin.GetSequenceNumber();
             }
         }
 
@@ -44,7 +44,7 @@ namespace ProELib
         {
             get
             {
-                return pin.GetPhysicalID();
+                return e3Pin.GetPhysicalID();
             }
         }
 
@@ -52,7 +52,7 @@ namespace ProELib
         {
             get
             {
-                return pin.HasDevice() == 1;
+                return e3Pin.HasDevice() == 1;
             }
         }
 
@@ -64,7 +64,7 @@ namespace ProELib
                 dynamic dx = default(dynamic);
                 dynamic dy = default(dynamic);
                 dynamic dz = default(dynamic);
-                int sheetId = pin.GetPanelLocation(ref dx, ref dy, ref dz);
+                int sheetId = e3Pin.GetPanelLocation(ref dx, ref dy, ref dz);
                 return new PinPanelLocation(sheetId, (double)dx, (double)dy, (double)dz);
             }
         }
@@ -106,7 +106,7 @@ namespace ProELib
         {
             get
             {
-                return pin.GetLogicalEquivalenceID();
+                return e3Pin.GetLogicalEquivalenceID();
             }
         }
 
@@ -114,7 +114,7 @@ namespace ProELib
         {
             get
             {
-                return pin.GetNameEquivalenceID();
+                return e3Pin.GetNameEquivalenceID();
             }
         }
 
@@ -125,7 +125,7 @@ namespace ProELib
                 dynamic dx = default(dynamic);
                 dynamic dy = default(dynamic);
                 dynamic dz = default(dynamic);
-                return pin.GetPanelLocation(ref dx, ref dy, ref dz) > 0;
+                return e3Pin.GetPanelLocation(ref dx, ref dy, ref dz) > 0;
             }
         }
 
@@ -133,7 +133,7 @@ namespace ProELib
         {
             get
             {
-                return pin.IsView() == 1;
+                return e3Pin.IsView() == 1;
             }
         }
 
@@ -141,11 +141,11 @@ namespace ProELib
         {
             get
             {
-                return pin.IsPinView() == 1;
+                return e3Pin.IsPinView() == 1;
             }
         }
 
-        internal DevicePin(e3Job job) : base(job)
+        internal DevicePin(e3Pin e3Pin) : base(e3Pin)
         {
             isLocationVariablesSet = false;
         }
@@ -156,7 +156,7 @@ namespace ProELib
         {
             isLocationVariablesSet = true;
             dynamic xCoordinate = default(dynamic), yCoordinate = default(dynamic), grid = default(dynamic);
-            sheetId = pin.GetSchemaLocation(ref xCoordinate, ref yCoordinate, ref grid);
+            sheetId = e3Pin.GetSchemaLocation(ref xCoordinate, ref yCoordinate, ref grid);
             if (xCoordinate != null && yCoordinate != null)
                 position = new Point(xCoordinate, yCoordinate);
         }
