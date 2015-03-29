@@ -39,6 +39,19 @@ namespace ProELib
             }
         }
 
+        public List<int> NetSegmentIds
+        {
+            get
+            {
+                dynamic netSegmentIds = default(dynamic);
+                int netSegmentCount = e3Sheet.GetNetSegmentIds(ref netSegmentIds);
+                List<int> ids = new List<int>(netSegmentCount);
+                for (int i = 1; i <= netSegmentCount; i++)
+                    ids.Add(netSegmentIds[i]);
+                return ids;
+            }
+        }
+
         public List<int> SchematicTypes
         {
             get

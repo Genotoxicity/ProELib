@@ -68,58 +68,81 @@ namespace ProELib
             }
         }
 
+        public bool IsCable
+        {
+            get
+            {
+                return e3Device.IsCable() == 1;
+            }
+        }
+
+        public bool IsWireGroup
+        {
+            get
+            {
+                return e3Device.IsWireGroup() == 1;
+            }
+        }
+
+        public bool IsTerminal
+        {
+            get
+            {
+                return e3Device.IsTerminal() == 1;
+            }
+        }
+
+        public bool IsMount
+        {
+            get
+            {
+                return e3Device.IsMount() == 1;
+            }
+        }
+
+        public bool IsCableDuct
+        {
+            get
+            {
+                return e3Device.IsCableDuct() == 1;
+            }
+        }
+
+        public bool IsHose
+        {
+            get
+            {
+                return e3Device.IsHose() == 1;
+            }
+        }
+
+        public bool IsBlock
+        {
+            get
+            {
+                return e3Device.IsBlock() == 1;
+            }
+        }
+
+        public bool IsView
+        {
+            get
+            {
+                return e3Device.IsView() == 1;
+            }
+        }
+
+        public bool IsConnector
+        {
+            get
+            {
+                return e3Device.IsConnector()==1;
+            }
+        }
+
         protected Device(e3Device e3Device)
         {
             this.e3Device = e3Device;
-        }
-
-        public bool IsCable()
-        {
-            if (e3Device.IsCable() == 1)
-                return true;
-            return false;
-        }
-
-        public bool IsWireGroup()
-        {
-            if (e3Device.IsWireGroup() == 1)
-                return true;
-            return false;
-        }
-
-        public bool IsTerminal()
-        {
-            if (e3Device.IsTerminal() == 1)
-                return true;
-            return false;
-        }
-
-        public bool IsMount()
-        {
-            if (e3Device.IsMount() == 1)
-                return true;
-            return false;
-        }
-
-        public bool IsCableDuct()
-        {
-            if (e3Device.IsCableDuct() == 1)
-                return true;
-            return false;
-        }
-
-        public bool IsHose()
-        {
-            if (e3Device.IsHose() == 1)
-                return true;
-            return false;
-        }
-
-        public bool IsBlock()
-        {
-            if (e3Device.IsBlock() == 1)
-                return true;
-            return false;
         }
 
         public string GetAttributeValue(string attributeName)
