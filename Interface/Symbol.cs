@@ -14,6 +14,32 @@ namespace ProELib
         private int sheetId;
         private bool isLocationVariablesSet;
 
+        public string Characteristic
+        {
+            get
+            {
+                return e3Symbol.GetCharacteristic();
+            }
+            set
+            {
+                e3Symbol.SetCharacteristic(value);
+                isAreaGot = false;
+            }
+        }
+
+        public List<string> ValidCharacteristics
+        {
+            get
+            {
+                dynamic chars = default(dynamic);
+                int charsCount = e3Symbol.GetValidCharacteristics(ref chars);
+                List<string> validChars = new List<string>(charsCount);
+                for (int i = 1; i <= charsCount; i++)
+                    validChars.Add(chars[i]);
+                return validChars;
+            }
+        }
+
         public int SheetId
         {
             get
@@ -21,6 +47,16 @@ namespace ProELib
                 if (!isLocationVariablesSet)
                     SetLocationVariables();
                 return sheetId;
+            }
+        }
+
+        public Point Position
+        {
+            get
+            {
+                if (!isLocationVariablesSet)
+                    SetLocationVariables();
+                return position;
             }
         }
 
@@ -91,6 +127,22 @@ namespace ProELib
             }
         }
 
+        public string SymbolTypeNameWithoutCharacteristic
+        {
+            get
+            {
+                string characteristic = e3Symbol.GetCharacteristic();
+                string typeName = e3Symbol.GetSymbolTypeName();
+                if (String.IsNullOrEmpty(characteristic))
+                    return typeName;
+                else
+                {
+                    typeName = typeName.Replace(characteristic, String.Empty);
+                    return typeName.Substring(0, typeName.Length - 1);
+                }
+            }
+        }
+
         public string SymbolTypeName
         {
             get
@@ -136,6 +188,14 @@ namespace ProELib
                 if (e3Symbol.GetSheetReferenceInfo(out inout, out type, out refnam, out signam) == 1)
                     return new SheetReferenceInfo((int)inout, (int)type, (string)signam, (string)refnam);
                 return null;
+            }
+        }
+
+        public int Level
+        {
+            get
+            {
+                return e3Symbol.GetLevel();
             }
         }
 
@@ -213,7 +273,7 @@ namespace ProELib
             dynamic dy = default(dynamic);
             dynamic grid = default(dynamic);
             sheetId = e3Symbol.GetSchemaLocation(ref dx, ref dy, ref grid);
-            position = new Point((double)dx, (double)dx);
+            position = new Point((double)dx, (double)dy);
         }
 
         public void SetAttribute(string attribute, string value)

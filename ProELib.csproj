@@ -63,6 +63,7 @@
     <Compile Include="Enums\SymbolType.cs" />
     <Compile Include="Interface\NetSegment.cs" />
     <Compile Include="Interface\SheetReferenceInfo.cs" />
+    <Compile Include="Structs\Margins.cs" />
     <Compile Include="Test\ColorPicker.cs" />
     <Compile Include="Structs\Area.cs" />
     <Compile Include="Interface\Component.cs" />

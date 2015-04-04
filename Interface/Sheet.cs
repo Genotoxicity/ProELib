@@ -216,56 +216,56 @@ namespace ProELib
             return from - offset;
         }
 
-        public bool IsUnderTarget(double target, double value)
+        public bool IsBelow(double target, double value)
         {
             if (ordinateDirection == OrdinateDirection.TopToBottom)
                 return target < value;
             return target > value;
         }
 
-        public bool IsAboveTarget(double target, double value)
+        public bool IsAbove(double target, double value)
         {
             if (ordinateDirection == OrdinateDirection.TopToBottom)
                 return target > value;
             return target < value;
         }
 
-        public bool IsUnderOrEqualTarget(double target, double value)
+        public bool IsBelowOrEqual(double target, double value)
         {
             if (ordinateDirection == OrdinateDirection.TopToBottom)
                 return target <= value;
             return target >= value;
         }
 
-        public bool IsAboveOrEqualTarget(double target, double value)
+        public bool IsAboveOrEqual(double target, double value)
         {
             if (ordinateDirection == OrdinateDirection.TopToBottom)
                 return target >= value;
             return target <= value;
         }
 
-        public bool IsRightOfTarget(double target, double value)
+        public bool IsToTheRight(double target, double value)
         {
             if (abscissaDirection == AbscissaDirection.LeftToRight)
                 return target < value;
             return target > value;
         }
 
-        public bool IsLeftOfTarget(double target, double value)
+        public bool IsToTheLeft(double target, double value)
         {
             if (abscissaDirection == AbscissaDirection.LeftToRight)
                 return target > value;
             return target < value;
         }
 
-        public bool IsRightOfOrEqualTarget(double target, double value)
+        public bool IsToTheRightOrEqual(double target, double value)
         {
             if (abscissaDirection == AbscissaDirection.LeftToRight)
                 return target <= value;
             return target >= value;
         }
 
-        public bool IsLeftOfOrEqualTarget(double target, double value)
+        public bool IsToTheLeftOrEqual(double target, double value)
         {
             if (abscissaDirection == AbscissaDirection.LeftToRight)
                 return target >= value;

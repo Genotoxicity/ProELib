@@ -194,6 +194,27 @@ namespace ProELib
             }
         }
 
+        public int ActiveSheetId
+        {
+            get
+            {
+                return job.GetActiveSheetId();
+            }
+        }
+
+        public List<int> TreeSelectedAllDeiveIds
+        {
+            get
+            {
+                dynamic treeSelectedAllDeviceIds = default(dynamic);
+                int deviceCount = job.GetTreeSelectedAllDeviceIds(ref treeSelectedAllDeviceIds);
+                List<int> ids = new List<int>(deviceCount);
+                for (int i = 1; i <= deviceCount; i++)    // e3 в [0] всегда возвращает null
+                    ids.Add(treeSelectedAllDeviceIds[i]);
+                return ids;
+            }
+        }
+
         public List<int> SignalIds
         {
             get
